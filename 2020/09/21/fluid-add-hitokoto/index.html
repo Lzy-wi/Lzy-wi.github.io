@@ -1,0 +1,814 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>fluid主题博客主页添加一言(hitokoto)手把手教学 - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-09-21 20:06" pubdate>
+        2020年9月21日 晚上
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:1.6k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      20
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">fluid主题博客主页添加一言(hitokoto)手把手教学</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>所以说爱恨真是奇怪的东西，有的早早腐烂入土，有的刻骨。 ——「全球高考」<br><a id="more"></a></p>
+<h4 id="启发"><a href="#启发" class="headerlink" title="启发"></a>启发</h4><p>不知不觉博客换了yilia、next、fluid三个主题了，三个主题都用了挺长时间。偶然间看到别人发的博客主页有句很好看的句子，自己也想搞一个来于是就动手搞一搞……<br><img src="/img/2020-09-21/1.png" srcset="/img/static/loading.gif" alt="1"><br>对于我这种主页不知道哔哔什么废话的再适合不过了。然鹅那个博客刷新的时候并没有发起特殊的请求，不过还好后来在同事的博客找到获取一句话的网络请求<del>，后来发现这个叫一言而且很多博客也有在用，孤陋寡闻了[捂脸]</del><br><img src="/img/2020-09-21/2.png" srcset="/img/static/loading.gif" alt="2"><br>首先fluid_config.yml中首页的一句话是在index下的slogan中的text设置，顺便添加<code>hitokoto</code>参数，方便开启和关闭一言。<br><pre><code class="hljs yaml"><span class="hljs-attr">index:</span>
+<span class="hljs-attr">  banner_img:</span> <span class="hljs-string">/img/default.jpg</span>  <span class="hljs-comment"># 首页 Banner 头图，以下相同</span>
+<span class="hljs-attr">  banner_img_height:</span> <span class="hljs-number">100</span>  <span class="hljs-comment"># 头图高度，屏幕百分比，available: 0 - 100</span>
+<span class="hljs-attr">  banner_mask_alpha:</span> <span class="hljs-number">0.3</span>  <span class="hljs-comment"># 头图黑色蒙版的透明度，available: 0 - 1.0， 0 是完全透明（无蒙版），1 是完全不透明</span>
+<span class="hljs-attr">  post_default_img:</span> <span class="hljs-string">''</span> <span class="hljs-comment"># 默认的文章封面图，当没有指定 index_img 时会使用该图片，若都为空则不显示任何图片</span>
+<span class="hljs-attr">  slogan:</span>  <span class="hljs-comment"># 首页副标题的独立设置</span>
+<span class="hljs-attr">    enable:</span> <span class="hljs-literal">true</span>  <span class="hljs-comment"># 为 false 则不显示任何内容</span>
+<span class="hljs-attr">    text:</span> <span class="hljs-string">''</span>
+<span class="hljs-attr">  hitokoto:</span>
+<span class="hljs-attr">    enable:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 开启hitokoto优先显示hitokoto</span>
+<span class="hljs-attr">  auto_excerpt:</span>
+<span class="hljs-attr">    enable:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">  post_url_target:</span> <span class="hljs-string">_self</span>  <span class="hljs-comment"># available: _blank | _self</span>
+<span class="hljs-attr">  post_meta:</span> <span class="hljs-comment"># 是否显示文章信息（时间、分类、标签）</span>
+<span class="hljs-attr">    date:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    category:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    tag:</span> <span class="hljs-literal">true</span>
+<span class="hljs-string">...</span></code></pre></p>
+<p><code>text</code>参数会传到<code>fluid/layout/index.ejs</code><br><img src="/img/2020-09-21/3.png" srcset="/img/static/loading.gif" alt="3"><br>最开始是想在这里更改为一言的一句话，在最上面可以通过插入<code>&lt;script&gt;</code>标签,然后使用ajax执行Get请求就可以获得一言的句子，但是此方法获取到的值只能在<code>&lt;script&gt;</code>内使用，不能赋值到ejs中<del>我也不会也没查到</del><strong>遂卒</strong><br>后来百度查到<code>hitokoto</code>有官方调用的文档–&gt;<a href="https://hitokoto.cn/" target="_blank" rel="noopener">传送门</a><br>也查到一个fluid主题添加一言的教程给了很多帮助–&gt;<a href="https://pxxyyz.com/posts/30454/" target="_blank" rel="noopener">传送门</a>，<del>然而那个人的博客主页并没有设置成功/doge</del>，还有这篇–&gt;<a href="https://blog.bill.moe/add-hitokoto/" target="_blank" rel="noopener">传送门</a><br>根据博客里讲的，修改的地方位于<code>layout\_partial\plugins\typed.ejs</code>，仔细想想也没错，修改<code>index.ejs</code>可以直接显示一言不用管其他文件但是实现起来有点困难，<code>typed.ejs</code>是打字机的js控制程序，通过修改<code>typed.ejs</code>实现index页面打印一言，其余页面该打印什么打印什么，只要加个if条件判断是index页面还是其他页面。</p>
+<h4 id="修改typed-ejs"><a href="#修改typed-ejs" class="headerlink" title="修改typed.ejs"></a>修改typed.ejs</h4><p>首先原始的<code>typed.ejs</code>主要分为2部分，第一部分是打字机调用程序，第二部分是接口<br><img src="/img/2020-09-21/4.png" srcset="/img/static/loading.gif" alt="4"><br>首先把打字机调用程序改成<code>function</code>形式，通过调用<code>typing</code>函数来输出，需要传入的参数有id和hitokoto(subtitle)，在原始的<code>typed.ejs</code>中通过<code>&lt;%- data.subtitle %&gt;</code>形式来传参，改成函数的时候要改为<code>hitokoto</code>，同时在<code>typed.ejs</code>中的<code>#subtitle</code>是输出点<br><pre><code class="hljs undefined"><span class="hljs-keyword">var</span> typed = <span class="hljs-keyword">new</span> <span class="hljs-type">Typed</span>(<span class="hljs-string">'#subtitle'</span>, &#123;</code></pre></p>
+<p>对应到layout.ejs中的如下位置，通过id来确定输出点<del>后来发现改了&lt;%- hitokoto %&gt;这个也可以，装死</del><br><img src="/img/2020-09-21/5.png" srcset="/img/static/loading.gif" alt="5"><br>如果控制台出现如下异常则是因为<code>typed.ejs</code>中#后面的参数和<code>layout.ejs</code>的输出点的id不一样导致打字机找不到输出点报的异常。<br><pre><code class="hljs undefined">TypeError: Cannot <span class="hljs-keyword">read</span> <span class="hljs-keyword">property</span><span class="hljs-title"> </span>'tagName' of null</code></pre></p>
+<p>因为我的目标只需要修改index页面的打字机而其他页面还是原来的样子，一旦修改了<code>#subtitle</code>就会触发报错，当然也可以不修改，因为我一开始没搞懂就改了，就懒得改回去了。封装好typing函数之后<code>typing(&quot;subtitle&quot;, &quot;&lt;%- data.subtitle %&gt;&quot;)</code>就可以调用，达到原来的样子根据参考的博客教程添加<code>&lt;% if(is_post()) { %&gt;</code>条件可以过让文章打印原始的subtitle，也就是对应着文章的标题，但是还不行，在其他归档、标签、关于等页面还是会显示一言。打开<code>about.ejs</code>和<code>page.ejs</code>对比会发现固定页面<code>page.layout</code>则是背设为固定，<code>page.ejs</code>则不是<br><pre><code class="hljs undefined"><span class="hljs-comment">//about.ejs</span>
+page<span class="hljs-selector-class">.layout</span> = <span class="hljs-string">"about"</span>
+
+<span class="hljs-comment">//page.ejs</span>
+<span class="hljs-selector-tag">var</span> layout = page.layout</code></pre></p>
+<p>因此用<code>&amp;&amp; page.layout!==&#39;about&#39; &amp;&amp; page.layout!==&#39;links&#39; &amp;&amp; page.layout!==&#39;archive&#39; &amp;&amp; page.layout!==&#39;tags&#39;</code>可以排除掉不想展示的页面。(如果你想要所有页面设为一言就去掉即可)。按照博客教程是只显示一句话，没有出处。对于引用别人的东西我喜欢加上出处<br><pre><code class="hljs undefined">data<span class="hljs-selector-class">.hitokoto</span> + <span class="hljs-string">'&lt;br&gt;&lt;br&gt;&lt;span class="from" id="from"&gt;'</span> + <span class="hljs-string">' ——「'</span> +data<span class="hljs-selector-class">.from</span> + <span class="hljs-string">'」&lt;/span&gt;'</span></code></pre></p>
+<p>关于出处一开始是用两个函数调用去输出然后发现很乱，一个句子和出处一起输出又不知道怎么实现出处右对齐<del>学艺不精,等等我本来就不是专精这个的→_→。</del>于是就通过一些css调整使形式相对更美观一些。<br>修改后的<code>type.ejs</code>如下</p>
+<pre><code class="hljs undefined"><span class="xml">
+<span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(theme.fun_features.typing.enable &amp;&amp; page.subtitle !== <span class="hljs-literal">false</span>)&#123; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">%-</span></span></span><span class="ruby"> js_ex(theme.static_prefix.typed, <span class="hljs-string">"/typed.min.js"</span>) </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">typing</span><span class="hljs-params">(id, hitokoto)</span></span>&#123;
+      <span class="hljs-keyword">var</span> typed = <span class="hljs-keyword">new</span> Typed(<span class="hljs-string">'#'</span> + id, &#123;
+        strings: [
+          <span class="hljs-string">'  '</span>,
+          hitokoto + <span class="hljs-string">"&amp;nbsp;"</span>,
+        ],
+        cursorChar: <span class="hljs-string">"&lt;%-</span></span></span><span class="ruby"> theme.fun_features.typing.cursorChar </span><span class="xml"><span class="undefined">%&gt;",
+        typeSpeed: &lt;%-</span></span><span class="ruby"> theme.fun_features.typing.typeSpeed </span><span class="xml"><span class="undefined">%&gt;,
+        loop: &lt;%-</span></span><span class="ruby"> theme.fun_features.typing.loop </span><span class="xml"><span class="javascript">%&gt;,
+      &#125;);
+      typed.stop();
+      $(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;
+        $(<span class="hljs-string">".typed-cursor"</span>).addClass(<span class="hljs-string">"h2"</span>);
+        typed.start();
+      &#125;);
+    &#125;;
+      
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(is_post()) &#123; </span><span class="xml"><span class="actionscript">%&gt;
+    typing(<span class="hljs-string">"subtitle"</span>, <span class="hljs-string">"&lt;%-</span></span></span><span class="ruby"> data.subtitle </span><span class="xml"><span class="undefined">%&gt;")
+  &lt;%</span></span><span class="ruby"> &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(theme.index.hitokoto.enable &amp;&amp; page.layout!==<span class="hljs-string">'about'</span> &amp;&amp; page.layout!==<span class="hljs-string">'links'</span> &amp;&amp; page.layout!==<span class="hljs-string">'archive'</span> &amp;&amp; page.layout!==<span class="hljs-string">'tags'</span>) &#123; </span><span class="xml"><span class="javascript">%&gt;
+    fetch(<span class="hljs-string">'https://v1.hitokoto.cn'</span>)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+    .then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> &#123;
+       typing(<span class="hljs-string">"hitokoto"</span>, (data.hitokoto + <span class="hljs-string">'&lt;br&gt;&lt;br&gt;&lt;span class="from" id="from"&gt;'</span> + <span class="hljs-string">' ——「'</span> +data.from + <span class="hljs-string">'」&lt;/span&gt;'</span>))
+    &#125;)
+    .catch(<span class="hljs-built_in">console</span>.error)
+    &lt;%</span></span><span class="ruby"> &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(page.layout!== <span class="hljs-string">''</span> ) &#123; </span><span class="xml"><span class="actionscript">%&gt;
+        typing(<span class="hljs-string">"subtitle"</span>, <span class="hljs-string">"&lt;%-</span></span></span><span class="ruby"> data.subtitle </span><span class="xml"><span class="undefined">%&gt;")
+    &lt;%</span></span><span class="ruby"> &#125; </span><span class="xml"><span class="undefined">%&gt;
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> &#125; </span><span class="xml"><span class="hljs-tag">%&gt;</span></span></code></pre>
+<h4 id="修改layout-ejs"><a href="#修改layout-ejs" class="headerlink" title="修改layout.ejs"></a>修改layout.ejs</h4><p><code>layout.ejs</code>则和博客教程的那样即可<br><pre><code class="hljs undefined"><span class="xml">  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"h2"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"subtitle"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(theme.fun_features.typing.enable == <span class="hljs-literal">false</span>) &#123; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">%-</span></span></span><span class="ruby"> subtitle </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> &#125; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(!is_post()) &#123; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"h2"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"subtitle"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(theme.fun_features.typing.enable == <span class="hljs-literal">false</span>) &#123; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">%-</span></span></span><span class="ruby"> hitokoto </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> &#125; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> &#125; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> <span class="hljs-keyword">if</span>(is_post() &amp;&amp; page.meta !== <span class="hljs-literal">false</span>) &#123; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">%-</span></span></span><span class="ruby"> partial(<span class="hljs-string">'_partial/post-meta'</span>) </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">%</span></span></span><span class="ruby"> &#125; </span><span class="xml"><span class="hljs-tag">%&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></code></pre></p>
+<p>成品如下，还有在博客下方评论框实现的。<del>为什么刷不到那句话。</del><br><img src="/img/2020-09-21/6.png" srcset="/img/static/loading.gif" alt="6"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/hexo/">hexo</a>
+                    
+                      <a class="hover-with-bg" href="/tags/hitokoto/">hitokoto</a>
+                    
+                      <a class="hover-with-bg" href="/tags/fluid/">fluid</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/09/11/qiangwangbei-GD-writewp/">
+                        <span class="hidden-mobile">2019广东省强网杯writeup</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2020/09/21/fluid-add-hitokoto/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "fluid主题博客主页添加一言(hitokoto)手把手教学")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,789 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>应急响应之linux篇 - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-07-22 19:32" pubdate>
+        2019年7月22日 晚上
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:961 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      12
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">应急响应之linux篇</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h4 id="记录一些常用linux应急响应知识"><a href="#记录一些常用linux应急响应知识" class="headerlink" title="记录一些常用linux应急响应知识"></a>记录一些常用linux应急响应知识</h4><a id="more"></a>
+<h6 id="表现为卡慢-性能资源紧张"><a href="#表现为卡慢-性能资源紧张" class="headerlink" title="表现为卡慢-性能资源紧张"></a>表现为卡慢-性能资源紧张</h6><pre><code class="hljs bash">free -m               <span class="hljs-comment">#以MB为单位查看内存使用情况  </span>
+free -l               <span class="hljs-comment">#查看内存使用细节  </span>
+ps aux|head -1;ps aux|grep -v PID|sort -rn -k +4|head <span class="hljs-comment">#查看内存使用前十名  </span>
+vmstat -a             <span class="hljs-comment">#查看CPU使用详情  </span>
+vmstat -d             <span class="hljs-comment">#查看CPU使用详情</span></code></pre>
+<h6 id="宕机死机"><a href="#宕机死机" class="headerlink" title="宕机死机"></a>宕机死机</h6><pre><code class="hljs bash">dmesg -T              <span class="hljs-comment">#按时间点查看内核日志  </span>
+dmesg -T |grep memory <span class="hljs-comment">#查看和内存相关的日志记录  </span>
+dmesg -T |grep cache  <span class="hljs-comment">#查看和崩溃相关的日志记录  </span>
+dmesg -T |grep reboot <span class="hljs-comment">#查看和重启相关的日志记录  </span>
+cat /var/<span class="hljs-built_in">log</span>/syslog   <span class="hljs-comment">#查看系统日志  </span>
+cat /var/<span class="hljs-built_in">log</span>/kern.log <span class="hljs-comment">#查看内核日志(ubuntu是kern.log，其他是kernel.log)</span></code></pre>
+<h6 id="断网断连排查-表现为网络不通或者间歇性连通"><a href="#断网断连排查-表现为网络不通或者间歇性连通" class="headerlink" title="断网断连排查-表现为网络不通或者间歇性连通"></a>断网断连排查-表现为网络不通或者间歇性连通</h6><pre><code class="hljs bash">iptables -L          <span class="hljs-comment">#查看防火墙  </span>
+cat /etc/resolv.conf <span class="hljs-comment">#查看域名解析  </span>
+ifoncifg -a          <span class="hljs-comment">#查看网卡信息</span></code></pre>
+<h6 id="一些服务的日志位置"><a href="#一些服务的日志位置" class="headerlink" title="一些服务的日志位置"></a>一些服务的日志位置</h6><pre><code class="hljs bash">/var/<span class="hljs-built_in">log</span>/httpd/access.log     <span class="hljs-comment">#http服务日志  </span>
+/var/<span class="hljs-built_in">log</span>/vsftp.log            <span class="hljs-comment">#ftp服务日志  </span>
+/var/<span class="hljs-built_in">log</span>/samba                <span class="hljs-comment">#samba服务日志  </span>
+/var/<span class="hljs-built_in">log</span>/message              <span class="hljs-comment">#DNS、DHCP日志</span></code></pre>
+<h6 id="入侵点入侵特征排查"><a href="#入侵点入侵特征排查" class="headerlink" title="入侵点入侵特征排查"></a>入侵点入侵特征排查</h6><pre><code class="hljs bash">netstat -antlop      <span class="hljs-comment">#查看  </span>
+ps -ef               <span class="hljs-comment">#查看异常连接和对应的文件  </span>
+ps aux               <span class="hljs-comment">#查看那进程详细信息  </span>
+lsof -p pid          <span class="hljs-comment">#查看进程关联账户信息  </span>
+  
+附录：ps命令常用用法（方便查看系统进程）  
+ps a  	<span class="hljs-comment">#显示现行终端机下的所有程序，包括其他用户的程序。  </span>
+ps -A 	<span class="hljs-comment">#显示所有进程。  </span>
+ps c 	<span class="hljs-comment">#列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。  </span>
+ps -e 	<span class="hljs-comment">#此参数的效果和指定"A"参数相同。  </span>
+ps e 	<span class="hljs-comment">#列出程序时，显示每个程序所使用的环境变量。  </span>
+ps f 	<span class="hljs-comment">#用ASCII字符显示树状结构，表达程序间的相互关系。  </span>
+ps -H 	<span class="hljs-comment">#显示树状结构，表示程序间的相互关系。  </span>
+ps -N 	<span class="hljs-comment">#显示所有的程序，除了执行ps指令终端机下的程序之外。  </span>
+ps s 	<span class="hljs-comment">#采用程序信号的格式显示程序状况。  </span>
+ps S 	<span class="hljs-comment">#列出程序时，包括已中断的子程序资料。  </span>
+ps -t&lt;终端机编号&gt; 　<span class="hljs-comment">#指定终端机编号，并列出属于该终端机的程序的状况。  </span>
+ps u 　 <span class="hljs-comment">#显示所有程序，不以终端机来区分。以用户为主的格式来显示程序状况。  </span>
+ps x 　	<span class="hljs-comment">#显示所有程序，不以终端机来区分。</span></code></pre>
+<p><strong>最常用的方法是ps -aux,然后再利用一个管道符号导向到grep去查找特定的进程,然后再对特定的进程进行操作</strong></p>
+<h6 id="登陆和爆破排查"><a href="#登陆和爆破排查" class="headerlink" title="登陆和爆破排查"></a>登陆和爆破排查</h6><pre><code class="hljs bash">last                        <span class="hljs-comment">#查看登陆或者重启日志  </span>
+lastb                       <span class="hljs-comment">#查看登录失败日志，或者是cat /var/log/faillog  </span>
+who /var/<span class="hljs-built_in">log</span>/wtmp           <span class="hljs-comment">#查看登录日志，或者last -f /var/run/utmp  </span>
+cat /var/<span class="hljs-built_in">log</span>/lastlog        <span class="hljs-comment">#查看最后的登录日志  </span>
+cat /var/<span class="hljs-built_in">log</span>/secure         <span class="hljs-comment">#查看安全日志  </span>
+cat /var/<span class="hljs-built_in">log</span>/cron           <span class="hljs-comment">#查看计划任务日志  </span>
+cat ~/.bash_history | more  <span class="hljs-comment">#查看历史操作  </span>
+grep <span class="hljs-string">"Failed password for root"</span> /var/<span class="hljs-built_in">log</span>/auth.log | awk <span class="hljs-string">'&#123;print $11&#125;'</span> | sort | uniq -nr | more  <span class="hljs-comment">#查看root账户登录爆破尝试  </span>
+grep <span class="hljs-string">"Accepted"</span> /var/<span class="hljs-built_in">log</span>/auth.log | awk <span class="hljs-string">'&#123;print $11&#125;'</span> | sort |uniq -c | sort -nr | more <span class="hljs-comment">#查看登录成功日志信息  </span>
+strings /usr/bin/.sshd | egrep <span class="hljs-string">'[1-9]&#123;1,3&#125;.[1-9]&#123;1,3&#125;.'</span>   <span class="hljs-comment">#查看sshd的信息</span></code></pre>
+<h6 id="漏洞利用入侵和后渗透的特征"><a href="#漏洞利用入侵和后渗透的特征" class="headerlink" title="漏洞利用入侵和后渗透的特征"></a>漏洞利用入侵和后渗透的特征</h6><pre><code class="hljs bash"><span class="hljs-comment">#查找webshell:  </span>
+find /var/www/ -name <span class="hljs-string">"*.php"</span> | xargs egrep <span class="hljs-string">'assert | phpspy | c99sh | milw0rm | eval | \( gunerpress | \(bas464_encode | spider _bc | shell_exec | passthru | \(\$\_\POST\[|eval\(str_rotl3 | .chr\c|\$\&#123;\"\_P|eval\C\$\_R | file_put_contents\C\.\*\$\_ | base64_decode'</span>  
+<span class="hljs-comment">#文件查找的相关命令：  </span>
+sudo find / -mtime(atime/ctime) -x   <span class="hljs-comment">#按照创建、修改时间查找  </span>
+sudo find ./ -perm 4777              <span class="hljs-comment">#按照权限查找文件  </span>
+find  ./ -mtime -1 -<span class="hljs-built_in">type</span> f           <span class="hljs-comment">#按照文件类型查找  </span>
+find -mtime -1 -<span class="hljs-built_in">type</span> f -name \*.php  <span class="hljs-comment">#查找最近一天被修改过的php文件</span></code></pre>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/linux/">linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/应急响应/">应急响应</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/11/qiangwangbei-GD-writewp/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2019广东省强网杯writeup</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/06/25/guosaiwp1/">
+                        <span class="hidden-mobile">国赛华南赛区的一道注入题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2019/07/22/Emergency_Response/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "应急响应之linux篇")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

